@@ -1,21 +1,33 @@
 import pyaudio 
 from queue import Queue
-chunk_size = 1024
+import numpy as np 
+import opuslib
 
 
 
-CHUNK = 1024
+CHUNK = 1024*10
+CHUNK = int(44100/4.0) # 0.25sec
+CHUNK = 2880 # 0.25sec
+
+# CHUNK = 44100
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
+RATE = 48000
+# RATE = 1000
 RECORD_SECONDS = 5
+# see also  https://github.com/orion-labs/opuslib/issues/11
+# 480, 960, 1920, and 2880
 
-
+opus_encoder = opuslib.Encoder(fs = RATE, channels=1, application="voip")
+opus_decoder = opuslib.Decoder(fs = RATE, channels=1)
 
 
 queue = Queue(100)
 
 audio_manager = pyaudio.PyAudio()
+
+
 stream = audio_manager.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
@@ -94,7 +106,7 @@ output_queue = Queue(100)
 def read_input():
     global queue
     while True : 
-        data = stream.read(CHUNK)
+        data = stream.read(CHUNK, exception_on_overflow=False)
         queue.put(data)
 
 # transfer
@@ -112,7 +124,6 @@ def write_output():
     while True:
         # print(output_queue.get())
         if (data:= output_queue.get()) :
-            print(data)
             stream.write(data)
 
 
