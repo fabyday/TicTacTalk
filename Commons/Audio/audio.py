@@ -1,3 +1,6 @@
+import os 
+opus_lib_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../lib"))
+os.environ["path"] = opus_lib_path + os.pathsep + os.environ["path"] 
 import pyaudio 
 from queue import Queue
 import numpy as np 
@@ -5,14 +8,11 @@ import opuslib
 
 
 
-CHUNK = 1024*10
-CHUNK = int(44100/4.0) # 0.25sec
 CHUNK = 2880 # 0.25sec
 
 # CHUNK = 44100
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
-RATE = 44100
 RATE = 48000
 # RATE = 1000
 # see also  https://github.com/orion-labs/opuslib/issues/11
@@ -66,12 +66,7 @@ def audio_open(input_device_index = 0, output_device_index = 0):
                         input=True,
                         output=True)
 
-    # # Play samples from the wave file (3)
-    # while len(data := wf.readframes(CHUNK)):  # Requires Python 3.8+ for :=
-    #     # stream.write(data)
-    #     data = stream.read(1024)
-    #     stream.write(data)
-
+    
 
 
 

@@ -12,7 +12,6 @@ import numpy as np
 THIS_COMPUTER = socket.gethostbyname(socket.gethostname())
 SERVER = THIS_COMPUTER
 
-print(THIS_COMPUTER, SERVER)
 PORT = 6060
 ADDR = (SERVER, PORT)
 THIS_PORT = 22234
@@ -20,40 +19,48 @@ THIS_PORT = 22234
 
 users_Queue = {}
 Queue(20)
-    
+
+user_queue_Lock = threading.Lock()   
 
 
 def Send(client):
     while True:
-            encoded_packet = audio.opus_encoder.encode(audio.get_input(), audio.CHUNK)
+            encoded_packet = audio.opus_encoder.encode(audio.get_input(), CHUNK_SIZE)
             client.sendto(encoded_packet, ADDR)
 
 
-
-
+import time 
+merge_recreate = False
 def Merge():
-    global users_Queue
-    packets = np.zeros(len(1, CHUNK_SIZE), dtype=np.int16)
+    global users_Queue, user_queue_Lock, merge_recreate
+    packets = np.zeros((len(users_Queue) if len(users_Queue) else 1, CHUNK_SIZE), dtype=np.int16)
+    div = np.array([0], np.int16)
+    merge_recreate = False
     while True:
-        if len(packet) != len(users_Queue):
-            packets = np.zeros(len(users_Queue, CHUNK_SIZE), dtype=np.int16)
-        else:
-            packets[...] = 0
-        
-        div = 0
-        for i, (key, queue) in enumerate(users_Queue):
+        if merge_recreate :
+            return
+        packets[...] = 0
+        # div[...] = 0
+        for i, (key, queue) in enumerate(users_Queue.items()):
             packet = queue.get()
             if packet:
-                div += 1
+                div[...] += 1
             else:
                 break
             packets[i, :] = np.frombuffer(packet, dtype=np.int16)
-        result = np.divide(np.sum(packet, dtype=np.int16), div, dtype=np.int16)
-        audio.write_output_queue(result.tobytes())
+            # print("what")
+        # print("release meger")
+        if div == 0 :
+            div[...] = 1
+        sumed_packet = np.sum(packets,axis=0, dtype=np.float32)
+        # print(sumed_packet)
+        result = np.divide(sumed_packet, div, dtype=np.float32)
+        
+        audio.write_output_queue(result.astype(np.int16).tobytes())
 
 
 def Recv(client):
-    
+    global user_queue_Lock, mergethread, merge_recreate
     
     print(client)
     while True:
@@ -68,22 +75,30 @@ def Recv(client):
             ip = socket.inet_ntoa(ip)
             port = header[4:]
             port
-            print("{} : {}".format(ip, int.from_bytes(port, "big")))
+            # print("{} : {}".format(ip, int.from_bytes(port, "big")))
             
             body_packet = recv_data[HEADER_SIZE:]
             packet = audio.opus_decoder.decode(body_packet, frame_size=audio.CHUNK)
+            # print("accuqrie recv")
 
             queue = users_Queue.get(header, None)
             if queue == None :
+                merge_recreate = True
                 users_Queue[header] = Queue(100)
-                users_Queue[header].put(packet)
+                mergethread = threading.Thread(target=Merge, args=())
+                mergethread.daemon = True
+                mergethread.start()
+            users_Queue[header].put(packet)
+            # print("relase recv")
+            
+
 
             
             
             
         audio.write_output_queue(result_packet.tobytes())
         # audio.write_output_queue(recv_data)
-        # Server -> Client 데이터 수신
+        # Server -> C  lient 데이터 수신
         # print(recv_data)
 
 if __name__ == '__main__':
@@ -151,3 +166,8 @@ if __name__ == '__main__':
     recvthread = threading.Thread(target=Recv, args=(client, ))
     recvthread.daemon = True
     recvthread.start()
+
+
+    while True: 
+        pass
+        
