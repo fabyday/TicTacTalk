@@ -1,7 +1,7 @@
 # Tic-Tac-Talk
 
 <p align="center">
-<img width="100%" src="./images/loading.gif"/>
+<img width="50%" src="./images/loading.gif"/>
 </p>
 
 **TicTacTalk** is Tiny Voice talk programs. It consists of server and client. Users who want to use can directly open own server and join conversation.
