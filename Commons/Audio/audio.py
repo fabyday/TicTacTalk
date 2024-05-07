@@ -15,7 +15,6 @@ CHANNELS = 1
 RATE = 44100
 RATE = 48000
 # RATE = 1000
-RECORD_SECONDS = 5
 # see also  https://github.com/orion-labs/opuslib/issues/11
 # 480, 960, 1920, and 2880
 

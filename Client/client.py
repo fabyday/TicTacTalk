@@ -18,7 +18,7 @@ ADDR = (SERVER, PORT)
 THIS_PORT = 22234
 
 
-users = {}
+users_Queue = {}
 Queue(20)
     
 
@@ -27,6 +27,29 @@ def Send(client):
     while True:
             encoded_packet = audio.opus_encoder.encode(audio.get_input(), audio.CHUNK)
             client.sendto(encoded_packet, ADDR)
+
+
+
+
+def Merge():
+    global users_Queue
+    packets = np.zeros(len(1, CHUNK_SIZE), dtype=np.int16)
+    while True:
+        if len(packet) != len(users_Queue):
+            packets = np.zeros(len(users_Queue, CHUNK_SIZE), dtype=np.int16)
+        else:
+            packets[...] = 0
+        
+        div = 0
+        for i, (key, queue) in enumerate(users_Queue):
+            packet = queue.get()
+            if packet:
+                div += 1
+            else:
+                break
+            packets[i, :] = np.frombuffer(packet, dtype=np.int16)
+        result = np.divide(np.sum(packet, dtype=np.int16), div, dtype=np.int16)
+        audio.write_output_queue(result.tobytes())
 
 
 def Recv(client):
@@ -48,30 +71,16 @@ def Recv(client):
             print("{} : {}".format(ip, int.from_bytes(port, "big")))
             
             body_packet = recv_data[HEADER_SIZE:]
-            if header == prev_header:
-                flag = False
-                prev_header = header
-            else : 
-                prev_header = header
+            packet = audio.opus_decoder.decode(body_packet, frame_size=audio.CHUNK)
+
+            queue = users_Queue.get(header, None)
+            if queue == None :
+                users_Queue[header] = Queue(100)
+                users_Queue[header].put(packet)
+
             
             
-            packet = audio.opus_decoder.decode(body_packet, frame_size=audio.CHUNK*3)
-            packet = np.frombuffer(packet, dtype=np.int16)
-            print(packet)
-            if not flag :
-                prev_packet = packet 
-                break
             
-            if prev_packet == None :
-                prev_packet = packet
-            else :
-                prev_packet += packet 
-            overlay_num += 1
-            print("test", overlay_num)
-        overlay_denom = float(1.0/overlay_num)
-        print(overlay_denom)
-        result_packet = prev_packet
-        overlay_num = 1
         audio.write_output_queue(result_packet.tobytes())
         # audio.write_output_queue(recv_data)
         # Server -> Client 데이터 수신
@@ -135,6 +144,9 @@ if __name__ == '__main__':
     sendthread = threading.Thread(target=Send, args=(client, ))
     sendthread.daemon = True
     sendthread.start()
+    mergethread = threading.Thread(target=Merge, args=())
+    mergethread.daemon = True
+    mergethread.start()
 
     recvthread = threading.Thread(target=Recv, args=(client, ))
     recvthread.daemon = True
