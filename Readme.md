@@ -1,4 +1,4 @@
-# Tic-Tac-Talk
+# TicTacTalk
 
 <p align="center">
 <img width="50%" src="./images/loading.gif"/>
