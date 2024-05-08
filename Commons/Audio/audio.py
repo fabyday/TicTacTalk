@@ -21,17 +21,13 @@ RATE = 48000
 opus_encoder = opuslib.Encoder(fs = RATE, channels=1, application="voip")
 opus_decoder = opuslib.Decoder(fs = RATE, channels=1)
 
-
+requeue = Queue(100)
 queue = Queue(100)
 
 audio_manager = pyaudio.PyAudio()
 
 
-stream = audio_manager.open(format=FORMAT,
-                channels=CHANNELS,
-                rate=RATE,
-                input=True,
-                frames_per_buffer=CHUNK)
+
 
 stream = None 
 audio_manager = None 
@@ -45,7 +41,7 @@ def deinit():
     if audio_manager :
         audio_manager.terminate()
 
-def audio_open(input_device_index = 0, output_device_index = 0):
+def audio_open(input_device_index = 0, output_device_index = 0, callback_f = None ):
     global stream
     if  stream :
         audio_close()
@@ -58,13 +54,64 @@ def audio_open(input_device_index = 0, output_device_index = 0):
     output_item_max_channel = output_item.get("maxInputChannels") if output_item.get("maxInputChannels") >= output_item.get("maxOutputChannels") else output_item.get("maxOutputChannels")
     max_channel = output_item_max_channel if output_item_max_channel > input_item_max_channel else input_item_max_channel
     print("max", max_channel)
-    stream = audio_manager.open(format=FORMAT,
+
+
+    if callback_f : 
+        stream = audio_manager.open(format=FORMAT,
                         channels=1,
                         rate=RATE,
                         input_device_index=input_device_index,
                         output_device_index = output_device_index,
                         input=True,
+                        output=True,
+                        frames_per_buffer=CHUNK,
+                        stream_callback=callback_f
+                        )
+    else :
+        stream = audio_manager.open(format=FORMAT,
+                        channels=1,
+                        rate=RATE,
+                        input_device_index=input_device_index,
+                        output_device_index = output_device_index,
+                        frames_per_buffer=CHUNK,
+                        input=True,
                         output=True)
+
+
+    # def callback_in(in_data, frame_count, time_info, status):
+    #     # If len(data) is less than requested frame_count, PyAudio automatically
+    #     # assumes the stream is finished, and the stream stops.
+    #     # print(np.frombuffer(in_data, np.int16))
+    #     # queue.put(in_data)
+    #     # print(frame_count)
+    #     requeue.put(in_data)
+    #     # return (room.get_voice_all(), pyaudio.paContinue)
+    #     return (None, pyaudio.paContinue)    
+    # def callback_out(in_data, frame_count, time_info, status):
+    #     If len(data) is less than requested frame_count, PyAudio automatically
+    #     assumes the stream is finished, and the stream stops.
+    #     print(np.frombuffer(in_data, np.int16))
+    #     queue.put(in_data)
+    #     return (room.get_voice_all(), pyaudio.paContinue)
+    #     print(frame_count)
+
+    #     return (requeue.get(), pyaudio.paContinue)    
+    # stream = audio_manager.open(format=FORMAT,
+    #                 channels=1,
+    #                 rate=RATE,
+    #                 frames_per_buffer=CHUNK,
+    #                 input_device_index=input_device_index,
+    #                 input=True,
+    #                 stream_callback=callback_in
+    #                 )
+    # stream2 = audio_manager.open(format=FORMAT,
+    #                 channels=1,
+    #                 rate=RATE,
+    #                 frames_per_buffer=CHUNK,
+    #                 output_device_index = output_device_index,
+    #                 output=True,
+    #                 stream_callback = callback_out
+    #                 )
 
     
 
@@ -109,6 +156,19 @@ def get_input():
     return queue.get()
 
 
+
+def callback_factory(room):
+    global queue
+    def callback(in_data, frame_count, time_info, status):
+        # If len(data) is less than requested frame_count, PyAudio automatically
+        # assumes the stream is finished, and the stream stops.
+        # print(np.frombuffer(in_data, np.int16))
+        queue.put(in_data)
+        # return (room.get_voice_all(), pyaudio.paContinue)
+        return (room.get_voice_all(), pyaudio.paContinue)
+    return callback
+
+
 def overlay_frames(*frames):
     """
         frames : list of decoded or raw frames
@@ -124,8 +184,6 @@ def overlay_frames(*frames):
 def write_output_queue(data):
     global output_queue
     output_queue.put(data)
-    time.sleep(RATE/CHUNK)
-    
 
 
 def write_output():
@@ -170,8 +228,8 @@ def enumerate_output_device():
     return res
 
 
-def select_input_output_device(in_index = None, out_index = None):
-    audio_open(in_index, out_index)
+def select_input_output_device(in_index = None, out_index = None, callback=None):
+    audio_open(in_index, out_index, callback_f=callback)
 
 
 

@@ -93,7 +93,7 @@ if __name__ == '__main__':
         try : 
             message = server.recvfrom(CHUNK_SIZE*100)
             msg, addr = message
-            print(addr)
+            # print(addr)
             send_queue.put([msg, addr,])
         except BlockingIOError:
             continue 

@@ -40,10 +40,9 @@ def Merge():
     while True:
         audio.write_output_queue(Room.get_voice_all())
 
-async def qqqs():
-    return 10
-async def qqq():
-    a = await qqqs()
+
+
+
 
 def Recv(client):
     global user_queue_Lock, mergethread, merge_recreate
@@ -59,7 +58,7 @@ def Recv(client):
             try : 
                 recv_data, addr = client.recvfrom((PACKET_SIZE)*20) 
             except BlockingIOError:
-                time.sleep(0.0001)
+                time.sleep(0.001)
                 continue
             # audio.audio_stream_compressor.decode(recv_data)
             header = recv_data[:HEADER_SIZE]
@@ -85,7 +84,7 @@ if __name__ == '__main__':
     # client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
     client.bind((THIS_COMPUTER, 0))
-    # client.setblocking(False)
+    client.setblocking(False)
 
     audio.init()
     for i in audio.enumerate_input_device():
@@ -117,15 +116,17 @@ if __name__ == '__main__':
             output_index = 0
     print(input_index)
     print(output_index)
-    audio.select_input_output_device(input_index, output_index)
+
+    
+    audio.select_input_output_device(input_index, output_index, audio.callback_factory(Room))
     
     
-    input_t = threading.Thread(target=audio.read_input)
-    input_t.daemon = True
-    input_t.start()
-    output_t = threading.Thread(target=audio.write_output)
-    output_t.daemon = True
-    output_t.start()
+    # input_t = threading.Thread(target=audio.read_input)
+    # input_t.daemon = True
+    # input_t.start()
+    # output_t = threading.Thread(target=audio.write_output)
+    # output_t.daemon = True
+    # output_t.start()
 
 
     # NAME = input("NAME:")
@@ -139,9 +140,9 @@ if __name__ == '__main__':
     sendthread = threading.Thread(target=Send, args=(client, ))
     sendthread.daemon = True
     sendthread.start()
-    mergethread = threading.Thread(target=Merge, args=())
-    mergethread.daemon = True
-    mergethread.start()
+    # mergethread = threading.Thread(target=Merge, args=())
+    # mergethread.daemon = True
+    # mergethread.start()
 
     recvthread = threading.Thread(target=Recv, args=(client, ))
     recvthread.daemon = True

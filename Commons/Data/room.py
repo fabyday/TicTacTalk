@@ -33,6 +33,8 @@ class Room:
             if msg : 
                 message.append(msg)
         self.mutex.release()
+        if len(message) > 1:
+            print("test clear")
         overlayed_msg = audio.overlay_frames(*message)
         return overlayed_msg
 
