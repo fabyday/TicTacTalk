@@ -5,7 +5,7 @@ import pyaudio
 from queue import Queue
 import numpy as np 
 import opuslib
-
+import time
 
 
 CHUNK = 2880 # 0.25sec
@@ -108,9 +108,24 @@ def get_input():
     global queue
     return queue.get()
 
+
+def overlay_frames(*frames):
+    """
+        frames : list of decoded or raw frames
+    """
+    size_t = len(frames)
+    size_t = size_t if size_t else 1
+    buffer = np.zeros((CHUNK), np.int16)
+    for frame in frames:
+        buffer += np.frombuffer(frame, dtype=np.int16)
+    buffer = buffer / size_t
+    return buffer.astype(np.int16).tobytes()
+
 def write_output_queue(data):
     global output_queue
     output_queue.put(data)
+    time.sleep(RATE/CHUNK)
+    
 
 
 def write_output():

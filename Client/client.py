@@ -1,8 +1,11 @@
 import socket
 import threading
 from queue import Queue
+import asyncio
 
 import Commons.Audio.audio as audio
+import Commons.Data.room as room 
+import Commons.Data.user as user
 HEADER_SIZE = 8 # 4 byte(ip) + 4byte(port)
 CHUNK_SIZE = audio.CHUNK
 packet_size = 3
@@ -18,10 +21,11 @@ THIS_PORT = 22234
 
 
 users_Queue = {}
-Queue(20)
 
 user_queue_Lock = threading.Lock()   
+loop = asyncio.get_event_loop()
 
+Room = room.Room()
 
 def Send(client):
     while True:
@@ -32,64 +36,40 @@ def Send(client):
 import time 
 merge_recreate = False
 def Merge():
-    global users_Queue, user_queue_Lock, merge_recreate
-    packets = np.zeros((len(users_Queue) if len(users_Queue) else 1, CHUNK_SIZE), dtype=np.int16)
-    div = np.array([0], np.int16)
-    merge_recreate = False
+    global Room
     while True:
-        if merge_recreate :
-            return
-        packets[...] = 0
-        # div[...] = 0
-        for i, (key, queue) in enumerate(users_Queue.items()):
-            packet = queue.get()
-            if packet:
-                div[...] += 1
-            else:
-                break
-            packets[i, :] = np.frombuffer(packet, dtype=np.int16)
-            # print("what")
-        # print("release meger")
-        if div == 0 :
-            div[...] = 1
-        sumed_packet = np.sum(packets,axis=0, dtype=np.float32)
-        # print(sumed_packet)
-        result = np.divide(sumed_packet, div, dtype=np.float32)
-        
-        audio.write_output_queue(result.astype(np.int16).tobytes())
+        audio.write_output_queue(Room.get_voice_all())
 
+async def qqqs():
+    return 10
+async def qqq():
+    a = await qqqs()
 
 def Recv(client):
     global user_queue_Lock, mergethread, merge_recreate
     
     print(client)
+    loop.run_in_executor(None, client.recvfrom, (PACKET_SIZE*20))
     while True:
         prev_header = None 
         prev_packet = None 
         overlay_num = 0
         while True : 
-            recv_data, addr = client.recvfrom((PACKET_SIZE)*20) 
+
+            try : 
+                recv_data, addr = client.recvfrom((PACKET_SIZE)*20) 
+            except BlockingIOError:
+                time.sleep(0.0001)
+                continue
             # audio.audio_stream_compressor.decode(recv_data)
             header = recv_data[:HEADER_SIZE]
-            ip = header[:4]
-            ip = socket.inet_ntoa(ip)
-            port = header[4:]
-            port
-            # print("{} : {}".format(ip, int.from_bytes(port, "big")))
+            # ip = header[:4]
+            # ip = socket.inet_ntoa(ip)
+            # port = header[4:]
             
             body_packet = recv_data[HEADER_SIZE:]
             packet = audio.opus_decoder.decode(body_packet, frame_size=audio.CHUNK)
-            # print("accuqrie recv")
-
-            queue = users_Queue.get(header, None)
-            if queue == None :
-                merge_recreate = True
-                users_Queue[header] = Queue(100)
-                mergethread = threading.Thread(target=Merge, args=())
-                mergethread.daemon = True
-                mergethread.start()
-            users_Queue[header].put(packet)
-            # print("relase recv")
+            Room.recv(header, packet)
             
 
 

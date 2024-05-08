@@ -93,9 +93,15 @@ if __name__ == '__main__':
         try : 
             message = server.recvfrom(CHUNK_SIZE*100)
             msg, addr = message
+            print(addr)
             send_queue.put([msg, addr,])
         except BlockingIOError:
             continue 
+        except WindowsError as e: 
+            # print(e)
+            # print(e.args)
+            pass
+            
         
         if  addr in group:
             pass
