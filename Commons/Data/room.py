@@ -27,22 +27,15 @@ class Room:
 
     def get_voice_all(self):
         message = []
-        self.mutex.acquire()
-        for key, user in self.m_users.items():
-            msg = user.get_voice_message()
-            if msg : 
-                message.append(msg)
-        self.mutex.release()
-        if len(message) > 1:
-            print("test clear")
+        for key in self.m_users.keys():
+            if user:=self.m_users.get(key):
+                msg =  user.get_voice_message()
+
+                if msg : 
+                    message.append(msg)
         overlayed_msg = audio.overlay_frames(*message)
         return overlayed_msg
 
-
-
-
-    def send_all(self):
-        pass
 
 
 

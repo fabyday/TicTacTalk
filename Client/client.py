@@ -47,32 +47,37 @@ def Merge():
 def Recv(client):
     global user_queue_Lock, mergethread, merge_recreate
     
+    loop = asyncio.new_event_loop()
+
     print(client)
-    loop.run_in_executor(None, client.recvfrom, (PACKET_SIZE*20))
+    # loop.run_in_executor(None, client.recvfrom, (PACKET_SIZE*20))
+
+    queue = Queue(100)
+    async def recv_data():
+        while True:
+            try : 
+                recv_data, addr = client.recvfrom((PACKET_SIZE)*20) 
+                print("test")
+                queue.put(recv_data)
+            except BlockingIOError:
+                time.sleep(0.001)
+    a = loop.run_in_executor(None, recv_data, ())
+    print("test :", a)
     while True:
         prev_header = None 
         prev_packet = None 
         overlay_num = 0
         while True : 
 
-            try : 
-                recv_data, addr = client.recvfrom((PACKET_SIZE)*20) 
-            except BlockingIOError:
-                time.sleep(0.001)
-                continue
+            if(recv_data := queue.get()):
             # audio.audio_stream_compressor.decode(recv_data)
-            header = recv_data[:HEADER_SIZE]
-            # ip = header[:4]
-            # ip = socket.inet_ntoa(ip)
-            # port = header[4:]
-            
-            body_packet = recv_data[HEADER_SIZE:]
-            packet = audio.opus_decoder.decode(body_packet, frame_size=audio.CHUNK)
-            Room.recv(header, packet)
-            
-
-
-            
+                header = recv_data[:HEADER_SIZE]
+                # ip = header[:4]
+                # ip = socket.inet_ntoa(ip)
+                # port = header[4:]
+                body_packet = recv_data[HEADER_SIZE:]
+                packet = audio.opus_decoder.decode(body_packet, frame_size=audio.CHUNK)
+                Room.recv(header, packet)
             
             
         audio.write_output_queue(result_packet.tobytes())
