@@ -2,7 +2,7 @@ from . import packet
 from typing import List, Union
 import socket, threading
 import inspect
-from ..Data import shared_dict
+from ..Data import shared_objects
 
 class AsyncClientConnectionManager:
     def __init__(self):
@@ -39,7 +39,7 @@ class AsyncServerConnectionManager:
         self.__m_server_port = server_port
 
 
-        self.__m_joined_clients = shared_dict.SharedDict()
+        self.__m_joined_clients = shared_objects.SharedDict()
 
     def __initialize_thread(self, target, name):
         self.__m_listen_thread = threading.Thread(target=self.__listen, name=self.__class__.__name__ + "." + self.__listen.__name__)
