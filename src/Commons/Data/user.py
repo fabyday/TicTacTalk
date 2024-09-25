@@ -7,7 +7,8 @@ class User:
     def __init__(self):
         self.ip = ""
         self.port = ""
-        self.voice_message_queue = queue.Queue(100)
+        self.voice_message_queue = queue.Queue(1000)
+        # self.video_streaming_queue = queue.Queue(1000)
 
 
     def recv(self, packet):
