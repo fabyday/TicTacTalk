@@ -25,7 +25,7 @@ class FixedPacketHeaderHelper:
     __fixed_header_format = ">IIQ"
     __header_size = struct.calcsize(__fixed_header_format)
 
-
+    
     def pack_header(message_type : int , extra_header : bytes, body_data_size : int ):
         return struct.pack(FixedPacketHeaderHelper.__fixed_header_format,message_type, len(extra_header), body_data_size) + extra_header
     def unpack_header(data : bytes):
