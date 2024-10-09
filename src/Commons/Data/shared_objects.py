@@ -9,7 +9,7 @@ class SharedDict:
     def __enter__(self):
         self.__m_lock.acquire()
         return self.__m_dict
-    def __exit__(self):
+    def __exit__(self,  exc_type, exc_value, traceback):
         self.__m_lock.release()
 
 
@@ -23,5 +23,5 @@ class SharedQueueBuffer:
         self.__m_lock.acquire()
         return self.__m_queue
     
-    def __exit__(self):
+    def __exit__(self,  exc_type, exc_value, traceback):
         self.__m_lock.release()

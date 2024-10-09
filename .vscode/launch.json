@@ -7,6 +7,25 @@
             "request": "launch",
             "module": "src.Client.main.py"
         },
+        {
+            "name": "client mock",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "tests.Client.mock_client"
+        },
+        {
+            "name": "server mock",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.Server.mocking_server"
+        },
+        
   
+    ],
+    "compounds": [
+        {
+            "name": "Compound",
+            "configurations": ["server mock","client mock"]
+        }
     ]
 }

@@ -37,7 +37,8 @@ class AudioManager():
         if not self.__m_audio_manager:
             audio_manager = pyaudio.PyAudio()
     
-    def audio_open()
+    def audio_open():
+        pass
 
 
     def deinit_audio(self):
