@@ -25,3 +25,4 @@ class SharedQueueBuffer:
     
     def __exit__(self,  exc_type, exc_value, traceback):
         self.__m_lock.release()
+        print("release")

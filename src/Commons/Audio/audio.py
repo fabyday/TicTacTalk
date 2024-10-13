@@ -40,12 +40,21 @@ class AudioManager():
     def audio_open():
         pass
 
-
+    
+    def enumerate_audio_device(self):
+        pass
+    
     def deinit_audio(self):
         if self.__m_audio_manager:
             self.__m_audio_manager.terminate()
 
-
+class AudioDevice():
+    def __init__(self):
+        pass 
+    
+    
+    def __init_audio(self):
+        pass
 
 
 stream = None 
@@ -95,7 +104,6 @@ def audio_open(input_device_index = 0, output_device_index = 0, callback_f = Non
                         frames_per_buffer=CHUNK,
                         input=True,
                         output=True)
-
 
     
 
