@@ -4,6 +4,7 @@ import socket, threading
 import inspect
 from ..Data import shared_objects
 import queue 
+from .ticprotocol import *
 
 class AsyncClientConnectionManager:
     def __init__(self):
@@ -48,15 +49,10 @@ class AsyncServerConnectionManager:
         self.__m_udp_receive_packet_num = 0
         self.__m_udp_sended_packet_num = 0
         
+        self.__m_input_message_queue = queue.Queue()
+        self.__m_output_message_queue = queue.Queue()
         
-
-    def __initialize_thread(self, target, name):
-        self.__m_listen_thread = threading.Thread(target=target, name=name)
-        self.__m_listen_thread.setDaemon(True)
-        self.__m_listen_thread.start()
-
-
-    def initialize(self):
+        
         self.__m_tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         self.__m_tcp_sock.setblocking(True)
         self.__m_tcp_sock.bind((self.__m_server_ip, self.__m_server_port))
@@ -66,15 +62,22 @@ class AsyncServerConnectionManager:
         self.__m_udp_sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         self.__m_udp_sock.setblocking(True)
         self.__m_udp_sock.bind((self.__m_server_ip, self.__m_udp_server_port))
+        
+
+    def __initialize_thread(self, target, name):
+        self.__m_listen_thread = threading.Thread(target=target, name=name)
+        self.__m_listen_thread.setDaemon(True)
+        self.__m_listen_thread.start()
+
+
+    def initialize(self):
+
 
         self.__m_listen_thread = self.__initialize_thread(target = self.__listen, name=self.__class__.__name__ + "." + self.__listen.__name__)
         self.__m_tcp_recv_server_thread = self.__initialize_thread(target = self.__server_tcp_send_run, name=self.__class__.__name__ + "." + self.__server_tcp_send_run.__name__)
         self.__m_tcp_send_server_thread = self.__initialize_thread(target = self.__server_tcp_recv_run, name=self.__class__.__name__ + "." + self.__server_tcp_recv_run.__name__)
         self.__m_udp_recv_server_thread = self.__initialize_thread(target = self.__server_udp_recv_run, name=self.__class__.__name__ + "." + self.__server_udp_recv_run.__name__)
         self.__m_udp_send_server_thread = self.__initialize_thread(target = self.__server_udp_send_run, name=self.__class__.__name__ + "." + self.__server_udp_send_run.__name__)
-
-        self.__m_input_message_queue = shared_objects.SharedQueueBuffer()
-        self.__m_output_message_queue = shared_objects.SharedQueueBuffer()
 
     def __listen(self):
         while True :
@@ -103,47 +106,32 @@ class AsyncServerConnectionManager:
         pass 
     
     
-    def send_udp_message(self, addr, msg):
-        with self.__m_output_message_queue as queue :
-            # queue.put((addr, msg)) 
-            pass
+    def send_udp_message(self, packet : packet.AbstractPacket):
+        self.__m_output_message_queue.put(packet)
         
 
     
     def __server_udp_send_run(self):
-        print("send inint")
-        
+        print("udp sender init")
+        ticpro_manager = TicProtocolManager()
         while True : 
-            pass
-            # with self.__m_output_message_queue as q :
-            #     try:
-            #         addr, msg = q.get_nowait()
-            #     except queue.Empty as e:
-            #         pass # do nothing
-            #     finally : 
-            #         # self.__m_udp_sock.sendto(msg, addr)
-            #         # self.__m_udp_sended_packet_num += 1
-            #         pass
+            pak = self.__m_output_message_queue.get()
+            ticpro_manager.send(pak.to_bytes(), pak.dest_addr, self.__m_udp_sock)
 
         
     
     def __server_udp_recv_run(self):
         print("udp init")
+        def msg_callback(msg : bytes):
+            raw_header = packet.FixedPacketHeaderHelper.unpack_header(msg)
+            packet_data = packet.PacketFactory.deserialize_packet(fixed_header=raw_header, data = data)
+            self.__m_input_message_queue.put(packet_data)
+        ticprotocol_manager = TicProtocolManager()
+        ticprotocol_manager.add_datagram_loaded_callback(msg_callback)
+        
         while True : 
-            try : 
-                print("packet.FixedHeader.header_size", packet.FixedHeader.header_size)
-                msg, addr = self.__m_udp_sock.recvfrom(packet.FixedHeader.header_size)
-                type(addr)
-                print(addr)
-                raw_header = packet.FixedPacketHeaderHelper.unpack_header(msg)
-                data, _ = self.__m_udp_sock.recvfrom(raw_header.extended_header_size + raw_header.body_data_size)
-                packet_data = packet.PacketFactory.deserialize_packet(fixed_header=raw_header, data = data)
-            
-                with self.__m_input_message_queue as queue :
-                    queue.put((addr, msg))
-            except  Exception as e:
-                pass 
-            
+            print("packet.FixedHeader.header_size", packet.FixedHeader.header_size)
+            ticprotocol_manager.receive(self, sock=self.__m_udp_sock)
             
                 
                 

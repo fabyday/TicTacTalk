@@ -65,14 +65,14 @@ def merge_mono_audio_chunks(sample_width : int | np.dtype, *audio_chunks):
     length_list =sorted(set([ arr.shape[-1] for arr in audio_arr ]))
     
     """
-    Audio_chunk 1(A1)      |             |
-    Audio_chunk 2(A2)      |                                  |
-    Audio_chunk 3(A3)      |                                  |
-    Audio_chunk 4(A4)      |                                                       |
-    ===============================================================
+    Audio_chunk 1(A1)      |=============|
+    Audio_chunk 2(A2)      |==============++++++++++++++++++++|
+    Audio_chunk 3(A3)      |==============++++++++++++++++++++|
+    Audio_chunk 4(A4)      |===================================--------------------|
+    --------------------------------------------------------------------------------------------
     
     
-    expand audio chunk     |   zero      | a2+a3+a4           |      A4            |
+    expand audio chunk     |   ZeroByte |     A2+A3+A4       |      A4            |
     """
     
     

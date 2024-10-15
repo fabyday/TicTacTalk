@@ -130,6 +130,7 @@ class InfoPacket(AbstractPacket):
 class VoicePacket(AbstractPacket):
         
     codec : str 
+    user_name : str
     voice_data: bytes
     
     
@@ -142,13 +143,14 @@ class PacketFactory:
     
     @staticmethod
     def deserialize_packet(sock : socket.socket):
-        header_bytes, addr = sock.recvfrom(FixedHeader.get_header_size())
+        # header_bytes, addr = sock.recvfrom(FixedHeader.get_header_size())
+        header_bytes, addr = sock.recvfrom(1024)
         header = FixedHeader.unapack_header(header_bytes)
         
         
         
         cls = PacketClassManager().get_cls_from_packet_id(header.message_type)
-        packet = cls.from_bytes(sock.recvfrom(header.body_size))
+        packet = cls.from_bytes(addr, ("localhost", 4040), sock.recvfrom(header.body_size))
         return packet
         
         

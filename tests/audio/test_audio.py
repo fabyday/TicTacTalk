@@ -35,7 +35,7 @@ import time
 import src.Commons.Audio as audio
 
 
-def funct():
+def audio_data_producer():
     
     frames = 0
     while frames < w2.getnframes() :
@@ -50,7 +50,7 @@ def funct():
         frames += ad.CHUNK
         audiv.put_audio(merged_bb)
         
-tt = threading.Thread(target=funct)
+tt = threading.Thread(target=audio_data_producer)
 tt.start()
 while audiv.get_ad().is_active():
     time.sleep(1)
