@@ -9,6 +9,7 @@ class Room:
         self.mutex = threading.Lock()
         self.__m_idle_status = True
 
+
     def recv(self, header, packet):
         
         try : 
@@ -23,6 +24,8 @@ class Room:
         self.mutex.acquire()
         self.m_users[user_key] = user.User()
         self.mutex.release()        
+
+        self.__m_idle_status = False
         
 
 

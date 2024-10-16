@@ -1,6 +1,7 @@
 class ServerDataManager:
     def __init__(self):
-        self.__m_rooms = {}  
+        self.__m_rooms = {}
+         
 
 
 
