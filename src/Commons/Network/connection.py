@@ -121,10 +121,11 @@ class AsyncServerConnectionManager:
         
     
     def __server_udp_recv_run(self):
-        print("udp init")
         def msg_callback(msg : bytes):
-            raw_header = packet.FixedPacketHeaderHelper.unpack_header(msg)
-            packet_data = packet.PacketFactory.deserialize_packet(fixed_header=raw_header, data = data)
+            header_size = packet.FixedHeader.get_header_size()
+            raw_header = packet.FixedPacketHeaderHelper.unpack_header(msg[:header_size])
+            
+            packet_data = packet.PacketFactory.deserialize_packet(fixed_header=raw_header, data = msg[header_size:])
             self.__m_input_message_queue.put(packet_data)
         ticprotocol_manager = TicProtocolManager()
         ticprotocol_manager.add_datagram_loaded_callback(msg_callback)

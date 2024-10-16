@@ -7,6 +7,7 @@ class Room:
         self.m_users = {}
         self.me = {}
         self.mutex = threading.Lock()
+        self.__m_idle_status = True
 
     def recv(self, header, packet):
         

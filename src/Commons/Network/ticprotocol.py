@@ -3,8 +3,8 @@ from .packet import *
 import struct
 seq:int 
 from dataclasses import dataclass
-
-
+import uuid
+from . import timestamp
 @dataclass
 class TicPacketHeader:
     """ 
@@ -12,13 +12,31 @@ class TicPacketHeader:
         cruent_sequence_num
         total_sequence
     """
-    header_format = ">III"
+    header_format = ">IIIf"
     header_size = struct.calcsize(header_format)
     max_packet_size = 2048
     payload_size = max_packet_size - header_size
     
+
+
+
+    
+    packet_id : uuid.UUID 
     sequence_num:int 
     total_sequence_num:int 
+    time_stamp : float 
+
+
+    def to_bytes(self):
+        return struct.pack(TicPacketHeader.header_format, self.packet_id, self.sequence_num, self.total_sequence_num, self.time_stamp)
+
+
+    @classmethod
+    def from_bytes(cls):
+        return TicPacketHeader(*struct.unpack(cls.header_format))
+    
+
+
     
 @dataclass
 class TicPacket:
@@ -40,8 +58,14 @@ class TicProtocol():
         payload_size = TicPacketHeader.payload_size
         chunk_num = len(packet) // payload_size + 1
         chunk_list = []
+        uid = uuid.uuid4()
+
+
+        t = timestamp.get_current_timestamp()
+
         for seq_num, chunk_i in enumerate(range(chunk_num)):
-            header = struct.pack(TicPacketHeader.header_format, seq_num)
+            
+            header =  TicPacketHeader(uid, seq_num, total_sequence_num=chunk_num, time_stamp=t).to_bytes()
             chunk = packet[chunk_i* payload_size : (chunk_i + 1)* payload_size ]
             chunk_list.append(header + chunk)
         return chunk_list
@@ -83,7 +107,7 @@ class TicProtocolManager():
     def add_datagram_loaded_callback(self, func):
         self.__m_compl_callbacks.append(func)
     
-    def receive(self, sock :socket.socket) -> bytes:
+    def receive(self, sock :socket.socket):
         
         data, _ = sock.recvfrom(TicProtocol.max_packet_size)
         pak = TicProtocol.restore_from_bytes(data)
@@ -92,5 +116,5 @@ class TicProtocolManager():
                 callback(pak)
         elif pak.header.sequence_num < pak.header.total_sequence_num: 
         
-            
-        return 
+    def append_data_chunk(self, packet):
+        self.__m_segmented_datagram_store.get()
