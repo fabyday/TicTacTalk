@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Room:
+    
     def __init__(self):
         self.m_users = {}
         self.me = {}

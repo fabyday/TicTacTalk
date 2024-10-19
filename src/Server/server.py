@@ -20,6 +20,18 @@ class Server:
         import time 
         
         while True : 
+            # voice_packet = Network.packet.VoicePacket()
+            # CHUNKSIZE= CHUNK*2
+            # chunk2 = self.w2.readframes(CHUNKSIZE)
+            # chunk2s= []
+            # for i in range(1):
+            #     chunk2 = audio_helper.stereo2mono(chunk2[CHUNKSIZE*i:CHUNKSIZE*(i+1)], self.w2.getnchannels(), self.w2.getsampwidth())
+            #     print("fsize " , len(chunk2))
+            #     chunk2 = audio_helper.opus_encode(chunk2)
+            #     p2 = Network.packet.VoicePacket(("localhost", 8080),("localhost", 9090), time_stamp=100, codec="opus",user_name="2", voice_data=chunk2)
+            #     # chunk2s.append(chunk2)
+            #     self.__m_network_manager.send_udp_message(chunk2)
+            # chunk2 = audio_helper.stereo2mono(chunk2, self.w2.getnchannels(), self.w2.getsampwidth())
             
             # print(len(chunk1))
             # chunk1 = audio_helper.opus_encode(chunk1)
