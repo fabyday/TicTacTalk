@@ -31,8 +31,8 @@ class AbstractPacket:
 
     def __init_subclass__(cls) -> None:
         super().__init_subclass__()
-        cls.packet_id = PacketClassManager().alloc_new_id()
-        PacketClassManager().register_packet(cls.packet_id, cls)
+        cls.packet_id = PacketClassManager.alloc_new_id()
+        PacketClassManager.register_packet(cls.packet_id, cls)
         # cls.__create_header()
         # cls.header_format = cls.__base__.header_format + cls.header_format
         # cls.header_size = struct.calcsize(cls.header_format)
@@ -103,7 +103,7 @@ class FixedHeader:
     
     @classmethod
     def unapack_header(cls, data):
-        return FixedHeader( *struct.unpack(cls.header_format, data) )
+        return FixedHeader( *struct.unpack(cls.header_format, data[:cls.header_size]) )
     
     
     def to_bytes(self):
@@ -116,7 +116,7 @@ class FixedHeader:
 
 
 
-
+        
 
 
 class InfoPacket(AbstractPacket):
@@ -144,13 +144,13 @@ class PacketFactory:
     @staticmethod
     def deserialize_packet(sock : socket.socket):
         # header_bytes, addr = sock.recvfrom(FixedHeader.get_header_size())
-        header_bytes, addr = sock.recvfrom(1024)
-        header = FixedHeader.unapack_header(header_bytes)
-        
-        
+        header_bytes, addr = sock.recvfrom(5896)
+        h_size = FixedHeader.get_header_size()
+        header = FixedHeader.unapack_header(header_bytes[:h_size])
+        payload = header_bytes[h_size:]
         
         cls = PacketClassManager().get_cls_from_packet_id(header.message_type)
-        packet = cls.from_bytes(addr, ("localhost", 4040), sock.recvfrom(header.body_size))
+        packet = cls.from_bytes(addr, ("localhost", 4040), payload)
         return packet
         
         

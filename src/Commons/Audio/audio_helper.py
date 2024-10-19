@@ -1,4 +1,22 @@
 import numpy as np 
+from .constants import * 
+
+
+
+import opuslib
+import scipy.signal
+
+opus_encoder = opuslib.Encoder(fs = RATE, channels=1, application="voip")
+opus_decoder = opuslib.Decoder(fs = RATE, channels=1)
+def opus_decode(data :bytes):
+    return opus_decoder.decode(data, CHUNK)
+     
+
+
+def opus_encode(data):
+    return opus_encoder.encode(data, CHUNK)
+
+
 
 
 
@@ -32,6 +50,16 @@ def __sample_width2numpy_type(sample_width : int | np.dtype, signed : bool = Tru
             raise NotImplementedError("Not Supported width") 
     return dtype
 
+
+def resample(x : bytes, freq : int, sample_width : int | np.dtype):
+    """
+        scipy resample wrapper.
+    """
+    dtype = __sample_width2numpy_type(sample_width)
+
+    np_buffer = np.frombuffer(x, dtype=dtype)
+    return scipy.signal.resample(np_buffer, freq).tobytes()
+    
 def stereo2mono(data : bytes, channel_num : int , sample_width : int | np.dtype, signed = True)->bytes:
     """_summary_
 
@@ -49,7 +77,9 @@ def stereo2mono(data : bytes, channel_num : int , sample_width : int | np.dtype,
        
     dtype = __sample_width2numpy_type(sample_width)
     npdata = np.frombuffer(data, dtype=dtype).reshape(-1, channel_num)
-    return np.mean(npdata, axis = -1).astype(dtype=dtype).tobytes()
+    data = np.mean(npdata, axis = -1).astype(dtype=dtype)
+    
+    return data.tobytes()
 
 
 

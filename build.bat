@@ -1,1 +1,1 @@
-pyinstaller -F  --collect-data opuslib client/Client.py 
+pyinstaller -F  --collect-data opuslib src/client/Client.py 

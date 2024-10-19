@@ -3,6 +3,10 @@ import pyaudio
 from dataclasses import dataclass
 from ..Data.shared_objects import SharedQueueBuffer
 from typing  import Literal
+from .constants import * 
+
+
+
 @dataclass
 class DeviceInfo:
     """
@@ -21,13 +25,13 @@ class DeviceInfo:
     defaultHighOutputLatency : float
     defaultSampleRate : float
     
-# predefined audio data
-CHUNK = 2880 # 0.25sec
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 48000   
+
 
 import numpy as np 
+
+
+
+
 
 zero = np.ones((CHUNK*RATE), dtype=np.int16)
 zero_byte = zero.tobytes()
@@ -153,6 +157,7 @@ class AudioManager:
                         )
         device.init(stream)
         return device
+    
     def create_output_device(self, out_dev_info : DeviceInfo):
         device = AudioDevice()
         stream = self.__m_audio_manager.open(format=FORMAT,
@@ -198,7 +203,7 @@ class AudioManager:
         
         return device
         
-  
+    
     def __new__(cls):
         if not hasattr(cls, "__instance"):
             cls.__instance = super(AudioManager, cls).__new__(cls)

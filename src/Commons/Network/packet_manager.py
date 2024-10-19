@@ -9,26 +9,27 @@ import pickle
 
 
 class PacketClassManager:
-    def __init__(self):
-        self.__m_packet_map = {}
-        self.__m_allocated_id = 0
+    __instance = None 
+    __m_packet_map = {}
+    __m_allocated_id = 0
 
-    def register_packet(self, packet_id, cls ):
-        item = self.__m_packet_map.get(packet_id, None)
+    
+    @classmethod
+    def register_packet(cls, packet_id, cls_ ):
+        item = cls.__m_packet_map.get(packet_id, None)
         if item is None :
-            self.__m_packet_map[packet_id] = cls
+            cls.__m_packet_map[packet_id] = cls_
+        print(cls.__m_packet_map)
     
     
-    def __new__(cls):
-        if not hasattr(cls, "__instance"):
-            cls.__instance = super(PacketClassManager, cls).__new__(cls)
-        return cls.__instance
     
-    def alloc_new_id(self):
-        self.__m_allocated_id += 1
-        return self.__m_allocated_id
+    @classmethod
+    def alloc_new_id(cls):
+        cls.__m_allocated_id += 1
+        return cls.__m_allocated_id
 
     
-    def get_cls_from_packet_id(self, packet_id):
-        return self.__m_packet_map[packet_id]
+    @classmethod
+    def get_cls_from_packet_id(cls, packet_id):
+        return cls.__m_packet_map[packet_id]
         

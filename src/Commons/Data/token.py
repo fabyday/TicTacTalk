@@ -11,5 +11,5 @@ class Token:
 
 def generate_token(self):
     token_issued_time = datetime.time()
-    exired_time = 
-    Token(uuid.uuid4(), token=
+    token_expired_time = token_issued_time + datetime.timedelta(days=30)
+    Token(token=uuid.uuid4(), token_expired_time=token_expired_time, token_issued_time=token_issued_time)

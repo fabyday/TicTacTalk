@@ -19,6 +19,13 @@
             "request": "launch",
             "module": "src.Server.mocking_server"
         },
+        {
+            "name": "server mock2",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "tests.Client.mock_server"
+        },
+        
         
   
     ],
