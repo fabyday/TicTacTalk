@@ -8,8 +8,7 @@ import queue
 import multiprocessing as mt 
 
 
-
-
+import asyncio
 
 class AsyncClientConnectionManager:
     def __init__(self):
@@ -58,13 +57,19 @@ class UDPWorker:
         while True : 
             pak = self.__m_in_queue.get()
             self.__m_port.sendto(pak.to_bytes(), pak.dest_addr) 
-            
+from dataclasses import   *
+
 class AsyncServerConnectionManager:
     """
     
         multiprocess based ASync class.
         tcp and udp process created and will be run.
     """ 
+    @dataclass 
+    class Client:
+        sock : socket.socket
+        addr : socket._Address
+    
     def __init__(self, listen_size = 24, server_ip = None, tcp_server_port = 6060, upd_server_port=7070):
         self.__m_listen_size = listen_size
         self.__m_server_ip = socket.gethostbyname(socket.gethostname()) if server_ip is  None else server_ip
@@ -81,7 +86,7 @@ class AsyncServerConnectionManager:
         self.__m_input_message_queue = mt.Queue()
         self.__m_output_message_queue = mt.Queue()
         
-        
+        self.__m_joined_new_client_queue = mt.Queue()        
         # self.__m_tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         # self.__m_tcp_sock.setblocking(True)
         # self.__m_tcp_sock.bind((self.__m_server_ip, self.__m_server_port))
@@ -94,42 +99,59 @@ class AsyncServerConnectionManager:
         self.__m_upd_server_process = mt.Process(target = self.udp_process_method, name = "name" )
         self.__m_upd_server_process.daemon = True
         self.__m_upd_server_process.start()
-        print("test is over")
-        # self.__m_upd_server_process = self.__initialize_process(self.__server_udp_send_run, args = (), name=self.__class__.__name__ + "." + self.__server_udp_send_run.__name__)
+        
+        self.__m_tcp_server_process = mt.Process(target = self.__tcp_process_method, name = "name" )
+        self.__m_tcp_server_process.daemon = True
+        self.__m_tcp_server_process.start()
+        
+        self.__m_tcp_listen_server_process = mt.Process(target = self.__listen, name = "name" )
+        self.__m_tcp_listen_server_process.daemon = True
+        self.__m_tcp_listen_server_process.start()
 
     
-    # def __initialize_process(self, target, args, name):
-    #     process = mt.Process(target = target, name = name, args=args )
-    #     process.daemon = True
-    #     process.start()
-    #     return process
-
-    # def __initialize_thread(self, target, name):
-        
-    #     thread = threading.Thread(target=target, name=name)
-    #     thread.setDaemon(True)
-    #     thread.start()
-    #     return thread
-
 
     def initialize(self):
-
         pass
-        # self.__m_listen_thread = self.__initialize_thread(target = self.__listen, name=self.__class__.__name__ + "." + self.__listen.__name__)
-        # self.__m_tcp_recv_server_thread = self.__initialize_thread(target = self.__server_tcp_send_run, name=self.__class__.__name__ + "." + self.__server_tcp_send_run.__name__)
-        # self.__m_tcp_send_server_thread = self.__initialize_thread(target = self.__server_tcp_recv_run, name=self.__class__.__name__ + "." + self.__server_tcp_recv_run.__name__)
-        # self.__m_udp_recv_server_thread = self.__initialize_thread(target = self.__server_udp_recv_run, name=self.__class__.__name__ + "." + self.__server_udp_recv_run.__name__)
-        # self.__m_udp_send_server_thread = self.__initialize_thread(target = self.__server_udp_send_run, name=self.__class__.__name__ + "." + self.__server_udp_send_run.__name__)
 
         
+    def __tcp_process_method(self):
+        self.__m_input_message_queue
+        self.clients =[]
+        self.__m_joined_new_client_queue
+        loop = asyncio.get_event_loop()
         
-    # def __listen(self):
-    #     while True :
-    #         self.__m_tcp_sock.listen(self.__m_listen_size)
-    #         client_sock, addr = self.__m_tcp_sock.accept()
-    #         with self.__m_joined_clients as d:
-    #             d[addr] = client_sock
-
+        queue = asyncio.Queue()
+        async def listen_message(client : AsyncServerConnectionManager.Client):
+            try : 
+                data = client.sock.recvfrom()
+            except : 
+                await asyncio.sleep(0.01)
+        async def tcp_accept_f():
+            while True : 
+                self.__m_tcp_sock.listen(self.__m_listen_size)
+                client_sock, addr = self.__m_tcp_sock.accept()
+                self.__m_joined_new_client_queue.put()
+                co_f = listen_message(AsyncServerConnectionManager.Client(client_sock, addr))
+                loop.create_task(co_f)
+        
+        
+            
+        loop.create_task(tcp_accept_f())
+        loop.run_forever()
+        # while True : 
+        #     try : 
+        #         new_client = self.__m_joined_new_client_queue.get_nowait()
+        #         self.clients.append(new_client)
+        #     except : 
+        #         data = None 
+        #     for client in self.clients:
+        #         client.
+        
+    def __listen(self):
+        while True :
+            self.__m_tcp_sock.listen(self.__m_listen_size)
+            client_sock, addr = self.__m_tcp_sock.accept()
+            self.__m_joined_new_client_queue.put(AsyncServerConnectionManager.Client(client_sock, addr))
 
     # def __server_tcp_recv_run(self):
     #     while True : 

@@ -28,10 +28,10 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QListWidget" name="listWidget"/>
+     <widget class="QListWidget" name="room_list"/>
     </item>
     <item>
-     <widget class="QListWidget" name="listWidget_2"/>
+     <widget class="QListWidget" name="server_member_list"/>
     </item>
    </layout>
   </widget>
