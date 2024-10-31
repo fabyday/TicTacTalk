@@ -12,7 +12,7 @@ import log_h
 
 # simple data init
 
-test_size = 1024
+test_size = 2048
 dtype= np.int16
 byte_data = np.zeros(test_size, dtype=dtype).tobytes()
 assert len(byte_data) == 2*test_size, "size is different What I expected." + len(byte_data)
@@ -37,6 +37,7 @@ def socket_send_function(queue : mt.Queue):
     byte_sended_per_sec = []
     queue_time = []
     send_time = []
+    print("start")
     while True : 
         queue_start = time.time()
         bdata = queue.get()

@@ -16,7 +16,6 @@ import multiprocessing as mt
 
 
 
-
 class Client:
     def __init__(self):
         

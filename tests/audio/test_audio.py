@@ -33,7 +33,9 @@ import time
 import numpy as np 
 import time 
 import src.Commons.Audio as audio
-
+def f():
+    while True:
+        time.sleep(100)
 
 def audio_data_producer():
     
@@ -51,6 +53,8 @@ def audio_data_producer():
         audiv.put_audio(merged_bb)
         
 tt = threading.Thread(target=audio_data_producer)
+tt2 = threading.Thread(target=f)
+tt2.start()
 tt.start()
 while audiv.get_ad().is_active():
     time.sleep(1)

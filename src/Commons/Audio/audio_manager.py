@@ -61,7 +61,7 @@ class AudioDevice():
     def get_input_audio_callback(self):
         global zero_byte
         def callback(in_data, frame_count, time_info, status):
-            self.__m_input_queue.put(in_data)
+            self.__m_output_queue.put(in_data)
             return (None, pyaudio.paContinue)
         return callback
         
@@ -72,9 +72,7 @@ class AudioDevice():
             # q.put(audio_chunk)
         
     def get_audio(self) -> bytes:
-        with self.__m_output_queue as q : 
-            item = q.get() 
-        return item 
+        return self.__m_output_queue.get()
     
     
     def get_chunk_size(self):
@@ -166,7 +164,7 @@ class AudioManager:
                         output_device_index = out_dev_info.index,
                         output = True,
                         frames_per_buffer = CHUNK,
-                        stream_callback= device.get_output_audio_callback()
+                        # stream_callback= device.get_output_audio_callback()
                         )
         device.init(stream)
         return device

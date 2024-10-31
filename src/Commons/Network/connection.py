@@ -68,7 +68,7 @@ class AsyncServerConnectionManager:
     @dataclass 
     class Client:
         sock : socket.socket
-        addr : socket._Address
+        addr : tuple
     
     def __init__(self, listen_size = 24, server_ip = None, tcp_server_port = 6060, upd_server_port=7070):
         self.__m_listen_size = listen_size
@@ -100,15 +100,16 @@ class AsyncServerConnectionManager:
         self.__m_upd_server_process.daemon = True
         self.__m_upd_server_process.start()
         
-        self.__m_tcp_server_process = mt.Process(target = self.__tcp_process_method, name = "name" )
-        self.__m_tcp_server_process.daemon = True
-        self.__m_tcp_server_process.start()
+        # self.__m_tcp_server_process = mt.Process(target = self.__tcp_process_method, name = "name" )
+        # self.__m_tcp_server_process.daemon = True
+        # self.__m_tcp_server_process.start()
         
-        self.__m_tcp_listen_server_process = mt.Process(target = self.__listen, name = "name" )
-        self.__m_tcp_listen_server_process.daemon = True
-        self.__m_tcp_listen_server_process.start()
+        # self.__m_tcp_listen_server_process = mt.Process(target = self.__listen, name = "name" )
+        # self.__m_tcp_listen_server_process.daemon = True
+        # self.__m_tcp_listen_server_process.start()
 
-    
+    def get_udp_addr(self):
+        return (self.__m_server_ip, self.__m_udp_server_port)
 
     def initialize(self):
         pass
@@ -168,13 +169,22 @@ class AsyncServerConnectionManager:
     # def send_tcp_message(self, addr, data):
     #     pass 
     
-    # def recv_udp_message(self):
-    #     pass 
+    def recv_udp_message(self):
+        try : 
+            return self.__m_input_message_queue.get_nowait()
+        except:
+            return None 
     
     
     def send_udp_message(self, packet : packet.AbstractPacket):
         self.__m_output_message_queue.put(packet)
-        
+    
+    def get_udp_output_queue(self):
+        return self.__m_output_message_queue
+    
+    def get_udp_input_queue(self):
+        return self.__m_input_message_queue
+    
     # def send_udp_message(self, packet : bytes):
         # self.__m_output_message_queue.put(packet)
         
@@ -189,13 +199,39 @@ class AsyncServerConnectionManager:
     #         self.__m_udp_sock.sendto(pak.to_bytes(), pak.dest_addr)
     def udp_process_method(self):
         print("sender process run")
+        import time
         # ticpro_manager = TicProtocolManager()
         self.__m_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.__m_udp_sock.setblocking(False)
+        self.__m_udp_sock.bind((self.__m_server_ip, self.__m_udp_server_port))
+        print("server is bind to ", (self.__m_server_ip, self.__m_udp_server_port))
+        sended = 0 
+        recved = 0
+        start = time.time()
         while True : 
-            pak = self.__m_output_message_queue.get()
+            try : 
+                pak = self.__m_output_message_queue.get_nowait()
+                sended += len(pak.to_bytes())
+                self.__m_udp_sock.sendto(pak.to_bytes(), pak.dest_addr)
+            except:
+                pass
+            try : 
+                pk = packet.PacketFactory.deserialize_packet(self.__m_udp_sock)
+                self.__m_input_message_queue.put(pk)
+                recved += len(pk.voice_data)
+            except Exception as e:
+                continue
+            
+            end = time.time()
+            if end - start >= 1:
+                print("sended : {} recved : {} KB/S".format(sended/1024, recved/1024))
+                start = end 
+                sended = 0
+                recved = 0
+            
+            
             # ticpro_manager.send(pak.to_bytes(), pak.dest_addr, self.__m_udp_sock)
             # self.__m_udp_sock.sendto(pak, ("localhost", 9090 ))
-            self.__m_udp_sock.sendto(pak.to_bytes(), pak.dest_addr)
     # def __server_udp_send_run(self):
     #     print("udp sender init")
     #     # ticpro_manager = TicProtocolManager()
