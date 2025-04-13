@@ -229,44 +229,7 @@ class AsyncServerConnectionManager:
                 sended = 0
                 recved = 0
             
-            
-            # ticpro_manager.send(pak.to_bytes(), pak.dest_addr, self.__m_udp_sock)
-            # self.__m_udp_sock.sendto(pak, ("localhost", 9090 ))
-    # def __server_udp_send_run(self):
-    #     print("udp sender init")
-    #     # ticpro_manager = TicProtocolManager()
-    #     while True : 
-            
-    #         pak = self.__m_output_message_queue.get()
-    #         # ticpro_manager.send(pak.to_bytes(), pak.dest_addr, self.__m_udp_sock)
-    #         # self.__m_udp_sock.sendto(pak, ("localhost", 9090 ))
-    #         self.__m_udp_sock.sendto(pak.to_bytes(), pak.dest_addr)
-    
-    
-    
-    
-    # def __server_udp_recv_run(self):
-    #     def msg_callback(msg : bytes):
-    #         header_size = packet.FixedHeader.get_header_size()
-    #         raw_header = packet.FixedPacketHeaderHelper.unpack_header(msg[:header_size])
-            
-    #         packet_data = packet.PacketFactory.deserialize_packet(fixed_header=raw_header, data = msg[header_size:])
-    #         self.__m_input_message_queue.put(packet_data)
-    #     # ticprotocol_manager = TicProtocolManager()
-    #     # ticprotocol_manager.add_datagram_loaded_callback(msg_callback)
-        
-    #     # while True : 
-    #     #     # print("packet.FixedHeader.header_size", packet.FixedHeader.header_size)
-    #     #     # ticprotocol_manager.receive(self, sock=self.__m_udp_sock)
-    #     #     header_size = packet.FixedHeader.get_header_size()
-    #     #     msg, _ = self.__m_udp_sock.recvfrom(2048)
-    #     #     raw_header = packet.FixedPacketHeaderHelper.unpack_header(msg[:header_size])
-            
-    #     #     packet_data = packet.PacketFactory.deserialize_packet(fixed_header=raw_header, data = msg[header_size:])
-    #     #     self.__m_input_message_queue.put(packet_data)
-            
-                
-                
+
             
                 
             

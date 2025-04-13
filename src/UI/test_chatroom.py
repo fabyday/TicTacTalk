@@ -67,34 +67,7 @@ def audio_output_run( qq  ):
     start = time.time()
     
     while True:
-        # try : 
-        #     pk = qq.get_nowait()
-        # except:
-        #     pk = None 
-        # if pk is None :
-        #     continue 
-        # dl.append(pk.voice_data)
-        # if len(dl) > 100:
-        #     for d in dl:
-        #         # d = audio_helper.opus_decode(d)
-        #         d = decode(d)
-        #         audiv.get_ad().write(d)
-        #     dl.clear()
-        # # track.setdefault(pk.user_name, queue.Queue()).put(pk.voice_data)
-        # # data = decode(data)
-        # # audiv.put_audio(data)
-        # # dl.append(data)
-        # # if  len(dl) > 1000:
-            
-        # #     data = audio.opus_decode(data)
-        # #     print("tes", len(dl))
-        # #     for d in dl : 
-        # #         # audiv.put_audio(d)
-        # #         # time.sleep(1)
-        # #         audiv.get_ad().write(d)
-        # #     dl.clear()
-                
-        # continue
+   
     
     
     
@@ -185,9 +158,8 @@ class AudioProcess():
 class Ui_MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.m_network_proc = net.connection.AsyncServerConnectionManager(server_ip="localhost", tcp_server_port=12345, upd_server_port=13441)
-        self.mmm = AudioProcess(self.m_network_proc)
-        print(self.m_network_proc.get_udp_addr())
+        
+        # print(self.m_network_proc.get_udp_addr())
         self.setupUi1(self)
         # self.loop = asyncio.get_event_loop()
         # self.loop = QEventLoop()
@@ -224,6 +196,8 @@ class Ui_MainWindow(QMainWindow):
         self.retranslateUi(MainWindow)
         # self.init_audio()
         self.data = {}
+        self.m_network_proc = net.connection.AsyncServerConnectionManager(server_ip="localhost", tcp_server_port=12345, upd_server_port=13441)
+        self.mmm = AudioProcess(self.m_network_proc)
         # self.consumer = Consumer(self.audiv, self.data, self.m_network_proc)
         # self.consumer2 = Consumer2(self.audiv, self.data, self.m_network_proc)
         # self.producer = producer(self.input_dev,  self.m_network_proc, username)
