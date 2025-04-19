@@ -1,19 +1,41 @@
-# TicTacTalk
+# 틱택톡 클라이언트
 
 
 <p align="center">
 <img width="100%" height="40%" src="./images/main.jpg"/>
 </p>
 
-**TicTacTalk** is Tiny Voice talk programs. It consists of server and client. Users who want to use can directly open own server and join conversation. 
-
-calm and free.
+**틱택톡**은 작은 커뮤니티 프로그램입니다. 클라이언트에 서버가 내장되어 있어 사용자는 자신만의 작은 서버를 만들 수 있습니다. 
+자신만의 커뮤니티 서버를 만들고 원하는 사람들을 초대하여 즐겁게 대화해보세요.
 
 
 ## Features
-- No ID, PASSWORD
-- Tiny Server for few men
+- 아이디, 패스워드 불필요(설정시)
+- 적은 인원을 위한 작은 커뮤니티
 
+
+## 기술 스택
+
+### 클라이언트
+
+| 분류       | 이름                            | 설명 |
+|------------|---------------------------------|------|
+| UI 프레임워크 | [Tailwind CSS](https://tailwindcss.com/) + [Headless UI](https://headlessui.com/) | 유틸리티 기반 CSS와 접근성 좋은 UI 컴포넌트 |
+| 아이콘       | [Lucide](https://lucide.dev/), [Phosphor Icons](https://phosphoricons.com/) | 심플하고 커스터마이징 쉬운 아이콘들 |
+| 애니메이션    | [Framer Motion](https://www.framer.com/motion/) | 리액트용 고급 애니메이션 라이브러리 |
+| 드래그/정렬   | [dnd-kit](https://dndkit.com/), [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd) | Drag & Drop 인터랙션을 위한 도구들 |
+| 상태 관리    | [Zustand](https://zustand-demo.pmnd.rs/) | 작고 직관적인 리액트 상태 관리 라이브러리 |
+
+
+### Server
+| 분류     | 이름                                  | 설명 |
+|----------|---------------------------------------|------|
+| 백엔드   | [NestJS](https://nestjs.com/)         | 구조적이고 타입 안정성이 뛰어난 Node.js 백엔드 프레임워크 |
+| DB   | [PostgreSQL](https://www.postgresql.org/)         | 오픈소스 관계형 데이터베이스 관리 시스템 |
+
+### 지원 코덱
+
+**오디오** : **Opus**
 
 
 ## prerequirements
@@ -34,24 +56,22 @@ download opus.dll in your environmentpath or its library
 
 
 
-## MIT License
+## MIT 라이센스
 Copyright (c) 2024 fabyday
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+본 소프트웨어 및 관련 문서 파일들(이하 "소프트웨어")의 사본을 입수하는 모든 사람에게, 
+소프트웨어를 제한 없이 다룰 수 있는 권한을 무상으로 부여합니다. 
+여기에는 소프트웨어를 사용, 복사, 수정, 병합, 출판, 배포, 서브라이선스, 
+또는 판매할 수 있는 권리와, 소프트웨어를 제공받은 사람이 그렇게 할 수 있도록 허용하는 권리가 포함됩니다.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+다음 조건을 충족해야 합니다:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+위 저작권 표시와 본 허가 조항은 소프트웨어의 모든 사본 또는 상당 부분에 포함되어야 합니다.
+
+본 소프트웨어는 "있는 그대로"(AS IS) 제공되며, 상품성, 특정 목적에의 적합성, 
+비침해에 대한 묵시적 보증을 포함하되 이에 제한되지 않는 어떠한 형태의 보증도 제공되지 않습니다. 
+어떠한 경우에도 저작권자 또는 권리자는 계약, 불법행위 또는 그 밖의 행위로 인해 발생한 
+손해나 기타 책임에 대해 책임을 지지 않습니다. 이는 소프트웨어 또는 소프트웨어의 사용이나 
+기타 거래와 관련된 경우에도 마찬가지입니다.
+
 
