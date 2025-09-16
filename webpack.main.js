@@ -14,4 +14,13 @@ module.exports = {
   module: {
     rules: [{ test: /\.ts$/, loader: 'ts-loader' }],
   },
+  externals: {
+    '@discordjs/opus': 'commonjs @discordjs/opus',
+    'node-opus': 'commonjs node-opus',
+    'ref': 'commonjs ref',
+    'ref-struct': 'commonjs ref-struct',
+    'ffi': 'commonjs ffi',
+    'ogg-packet': 'commonjs ogg-packet',
+    'bindings': 'commonjs bindings'
+  },
 };

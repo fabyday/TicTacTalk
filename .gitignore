@@ -7,3 +7,12 @@
 **/.env
 
 **/node_modules
+*storybook.log
+storybook-static
+
+
+
+
+
+
+dist-*
