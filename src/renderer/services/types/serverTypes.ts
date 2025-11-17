@@ -4,12 +4,16 @@ import {
   Community,
   CreateTextChannelRequest,
   Message,
+  PublicCommunity,
   TextChannel,
   UserProfile,
   VoiceChannel,
 } from "./serverDataTypes";
 import type { EventsMap } from "@socket.io/component-emitter";
-import { CreateChannelRequest } from "./serverManipulationTypes";
+import {
+  CreateChannelRequest,
+  RequestNotify as T3RequestNotify,
+} from "./serverManipulationTypes";
 
 export interface TTTSockListenEvents extends EventsMap {
   lis: () => void;
@@ -26,6 +30,8 @@ export interface VoiceChatConnection {}
 
 interface IT3TextChannelResponseMap {
   "/text-channel": TextChannel;
+  [key: `/text-channel/community/${number}`]: TextChannel[];
+
   [
     key: `/text-channel/${string}/messages?skip=${string}&take=${string}`
   ]: Message[];
@@ -34,6 +40,7 @@ interface IT3TextChannelResponseMap {
 }
 interface IT3CommunityResponseMap {
   "/chat/community": Community;
+  "/chat/community/public": PublicCommunity[];
 }
 interface IT3AuthResponseMap {
   "/auth/login": LoginResponse;
@@ -42,6 +49,8 @@ interface IT3AuthResponseMap {
 }
 interface IT3VoiceChatResponseMap {
   "/voicechat/channels": VoiceChannel;
+  [key: `/voicechat/channels/${number}`]: T3RequestNotify;
+  [key: `/voicechat/channels/community/${number}`]: VoiceChannel[];
 }
 
 export interface ApiResponseMap

@@ -31,11 +31,22 @@ export class T3CommunityOp {
       }
     );
   }
-  async getTextChannelList(): Promise<TextChannel[]> {}
+  async getTextChannelList(): Promise<TextChannel[]> {
+    return this.m_server.request(
+      `/text-channel/community/${this.m_communityInfo.id}`,
+      {
+        method: "GET",
+      }
+    );
+  }
 
-  async deleteChannel(channelId: number): Promise<void> {
-    const response = await this.request<{ success: boolean; message?: string }>(
-      `/voicechat/channels/${channelId}`,
+  async deleteChannel(channelId: number | T3TextChannelOp): Promise<void> {
+    const response = await this.m_server.request(
+      `/voicechat/channels/${
+        typeof channelId === "number"
+          ? channelId
+          : channelId.m_textChannelInfo.id
+      }`,
       {
         method: "DELETE",
       }

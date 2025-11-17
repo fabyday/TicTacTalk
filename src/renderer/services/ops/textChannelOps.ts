@@ -1,3 +1,6 @@
+import { T3Server } from "../ttapi";
+import { Message, SendMessageRequest, TextChannel } from "../types";
+
 export class T3TextChannelOp {
   m_server: T3Server;
   m_textChannelInfo: TextChannel;

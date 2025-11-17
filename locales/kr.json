@@ -1,3 +1,15 @@
 {
-    
+  "renderer": {
+    "components": {
+      "chat": {
+        "MessageFeed": {
+          "NoMessages": "아직 메세지가 없습니다",
+          "NewMessage": "새로운 메시지"
+        }
+      },
+      "ChatInput": {
+        "WriteMessage": "메시지를 입력하세요"
+      }
+    }
+  }
 }

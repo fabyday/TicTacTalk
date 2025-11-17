@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Eye, EyeOff, Server, User, Lock, AlertCircle } from "lucide-react";
-import { apiService } from "../services/api";
+// import { apiService } from "../services/api";
 import LoadingOverlay from "./loadingOverlay";
 
 interface LoginFormProps {
@@ -35,11 +35,11 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
   // BGM on/off 상태 로드
   useEffect(() => {
-    const saved = localStorage.getItem('loginBgmOn');
+    const saved = localStorage.getItem("loginBgmOn");
     if (saved !== null) {
-      const savedBgmOn = saved === 'true';
+      const savedBgmOn = saved === "true";
       setBgmOn(savedBgmOn);
-      
+
       // 저장된 상태가 ON이면 바로 재생 시도
       if (savedBgmOn && audioRef.current) {
         audioRef.current.volume = 0.15;
@@ -56,20 +56,20 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
         // 자동 재생이 안 될 경우를 대비해 사용자 상호작용 시 재생
         const playAudio = () => {
           audioRef.current?.play().catch(() => {});
-          document.removeEventListener('click', playAudio);
-          document.removeEventListener('keydown', playAudio);
+          document.removeEventListener("click", playAudio);
+          document.removeEventListener("keydown", playAudio);
         };
-        
+
         audioRef.current.play().catch(() => {
           // 자동 재생이 실패하면 사용자 상호작용 시 재생
-          document.addEventListener('click', playAudio);
-          document.addEventListener('keydown', playAudio);
+          document.addEventListener("click", playAudio);
+          document.addEventListener("keydown", playAudio);
         });
       } else {
         audioRef.current.pause();
       }
     }
-    localStorage.setItem('loginBgmOn', String(bgmOn));
+    localStorage.setItem("loginBgmOn", String(bgmOn));
   }, [bgmOn]);
 
   // 로그인 성공 시 BGM 정지
@@ -132,15 +132,15 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
         return;
       }
 
-      // 서버 URL 설정
-      apiService.setBaseUrl(serverUrl);
-      apiService.setAccessToken(savedToken);
+      // // 서버 URL 설정
+      // apiService.setBaseUrl(serverUrl);
+      // apiService.setAccessToken(savedToken);
 
-      // 토큰 유효성 검사
-      const profile = await apiService.getProfile();
+      // // 토큰 유효성 검사
+      // const profile = await apiService.getProfile();
 
       // 자동 로그인 성공
-      await onLogin(serverUrl, profile.username, "");
+      // await onLogin(serverUrl, profile.username, "");
     } catch (error) {
       console.error("자동 로그인 실패:", error);
       // 토큰이 유효하지 않으면 삭제
@@ -163,25 +163,22 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
     setError(null);
 
     try {
-      apiService.setBaseUrl(serverUrl);
-
+      // apiService.setBaseUrl(serverUrl);
       // 먼저 기본 ping 테스트
-      const isPingable = await apiService.ping();
-      if (!isPingable) {
-        setError("서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.");
-        return;
-      }
-
-      // 그 다음 auth 엔드포인트 테스트
-      const isConnected = await apiService.testConnection();
-
-      if (isConnected) {
-        setError(null);
-        // 성공 메시지를 잠시 표시
-        setTimeout(() => setError(null), 2000);
-      } else {
-        setError("인증 서비스에 연결할 수 없습니다. 서버 설정을 확인해주세요.");
-      }
+      // const isPingable = await apiService.ping();
+      // if (!isPingable) {
+      //   setError("서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.");
+      //   return;
+      // }
+      // // 그 다음 auth 엔드포인트 테스트
+      // // const isConnected = await apiService.testConnection();
+      // if (isConnected) {
+      //   setError(null);
+      //   // 성공 메시지를 잠시 표시
+      //   setTimeout(() => setError(null), 2000);
+      // } else {
+      //   setError("인증 서비스에 연결할 수 없습니다. 서버 설정을 확인해주세요.");
+      // }
     } catch (error) {
       setError("서버 연결에 실패했습니다. 서버가 실행 중인지 확인해주세요.");
     } finally {
@@ -196,19 +193,19 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
     try {
       // 서버 URL 설정
-      apiService.setBaseUrl(serverUrl);
+      // apiService.setBaseUrl(serverUrl);
 
       // 로그인 API 호출
-      const loginResponse = await apiService.login({ username, password });
+      // const loginResponse = await apiService.login({ username, password });
 
       // 액세스 토큰 설정
-      apiService.setAccessToken(loginResponse.accessToken);
+      // apiService.setAccessToken(loginResponse.accessToken);
 
       // 토큰을 localStorage에 저장 (자동 로그인용)
-      localStorage.setItem('accessToken', loginResponse.accessToken);
+      // localStorage.setItem("accessToken", loginResponse.accessToken);
 
       // 사용자 프로필 정보 가져오기
-      const profile = await apiService.getProfile();
+      // const profile = await apiService.getProfile();
 
       // 로그인 정보 저장 (자동 로그인 체크 시)
       if (autoLogin) {
@@ -221,7 +218,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // 로그인 성공 콜백 호출
-      await onLogin(serverUrl, profile.username, password);
+      // await onLogin(serverUrl, profile.username, password);
     } catch (error) {
       console.error("Login failed:", error);
       if (error instanceof Error) {
@@ -250,20 +247,23 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
         src="file:///D:/project/tictactalk/client/resources/sounds/login_sound.mp3"
         autoPlay
         loop
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         onLoadedData={() => {
-          console.log('오디오 로드 완료, 재생 시도...');
+          console.log("오디오 로드 완료, 재생 시도...");
           if (bgmOn && audioRef.current) {
             audioRef.current.volume = 0.15;
-            audioRef.current.play().then(() => {
-              console.log('오디오 재생 성공!');
-            }).catch((error) => {
-              console.error('오디오 재생 실패:', error);
-            });
+            audioRef.current
+              .play()
+              .then(() => {
+                console.log("오디오 재생 성공!");
+              })
+              .catch((error) => {
+                console.error("오디오 재생 실패:", error);
+              });
           }
         }}
         onError={(e) => {
-          console.error('오디오 로드 실패:', e);
+          console.error("오디오 로드 실패:", e);
         }}
       />
       {/* BGM on/off 라디오 버튼 */}
@@ -480,15 +480,15 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
       </div>
 
       {/* 회원가입 모달 */}
-      <RegisterModal 
+      <RegisterModal
         isOpen={showRegisterModal}
         onClose={() => setShowRegisterModal(false)}
         serverUrl={serverUrl}
         onRegisterSuccess={() => setShowCongratulations(true)}
       />
-      
+
       {/* 축하 모달 */}
-      <CongratulationsModal 
+      <CongratulationsModal
         isOpen={showCongratulations}
         onClose={() => setShowCongratulations(false)}
       />
@@ -509,9 +509,12 @@ function CongratulationsModal({ isOpen, onClose }: CongratulationsModalProps) {
       <div className="bg-gray-800 rounded-lg p-6 w-96 max-w-md mx-4 shadow-2xl">
         <div className="text-center">
           <div className="text-6xl mb-4">🎉</div>
-          <h2 className="text-white text-2xl font-bold mb-2">회원가입을 축하합니다!</h2>
+          <h2 className="text-white text-2xl font-bold mb-2">
+            회원가입을 축하합니다!
+          </h2>
           <p className="text-gray-300 text-sm mb-6">
-            계정이 성공적으로 생성되었습니다.<br/>
+            계정이 성공적으로 생성되었습니다.
+            <br />
             이제 로그인하여 서비스를 이용하세요!
           </p>
           <button
@@ -533,10 +536,15 @@ interface RegisterModalProps {
   onRegisterSuccess: () => void;
 }
 
-function RegisterModal({ isOpen, onClose, serverUrl, onRegisterSuccess }: RegisterModalProps) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+function RegisterModal({
+  isOpen,
+  onClose,
+  serverUrl,
+  onRegisterSuccess,
+}: RegisterModalProps) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -544,14 +552,14 @@ function RegisterModal({ isOpen, onClose, serverUrl, onRegisterSuccess }: Regist
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
-      setError('비밀번호가 일치하지 않습니다.');
+      setError("비밀번호가 일치하지 않습니다.");
       return;
     }
 
     if (password.length < 4) {
-      setError('비밀번호는 최소 4자 이상이어야 합니다.');
+      setError("비밀번호는 최소 4자 이상이어야 합니다.");
       return;
     }
 
@@ -560,24 +568,23 @@ function RegisterModal({ isOpen, onClose, serverUrl, onRegisterSuccess }: Regist
       setError(null);
 
       // 서버 URL 설정
-      apiService.setBaseUrl(serverUrl);
+      // apiService.setBaseUrl(serverUrl);
 
       // 회원가입 API 호출
-      const response = await apiService.register({ username, password });
-      
+      // const response = await apiService.register({ username, password });
+
       // 즉시 모달 닫기
       onClose();
-      setUsername('');
-      setPassword('');
-      setConfirmPassword('');
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
       setSuccess(null);
-      
+
       // 축하 모달 표시
       onRegisterSuccess();
-
     } catch (error: any) {
-      console.error('회원가입 실패:', error);
-      setError(error.message || '회원가입에 실패했습니다.');
+      console.error("회원가입 실패:", error);
+      setError(error.message || "회원가입에 실패했습니다.");
     } finally {
       setIsRegistering(false);
     }
@@ -585,9 +592,9 @@ function RegisterModal({ isOpen, onClose, serverUrl, onRegisterSuccess }: Regist
 
   const handleClose = () => {
     if (!isRegistering) {
-      setUsername('');
-      setPassword('');
-      setConfirmPassword('');
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
       setError(null);
       setSuccess(null);
       onClose();
@@ -599,8 +606,10 @@ function RegisterModal({ isOpen, onClose, serverUrl, onRegisterSuccess }: Regist
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center">
       <div className="bg-gray-800 rounded-lg p-6 w-96 max-w-md mx-4 shadow-2xl">
-        <h2 className="text-white text-xl font-bold mb-4 text-center">회원가입</h2>
-        
+        <h2 className="text-white text-xl font-bold mb-4 text-center">
+          회원가입
+        </h2>
+
         {error && (
           <div className="bg-red-900/70 border border-red-500 rounded-md p-3 mb-4 flex items-center space-x-2">
             <AlertCircle className="h-5 w-5 text-red-400" />
@@ -614,7 +623,7 @@ function RegisterModal({ isOpen, onClose, serverUrl, onRegisterSuccess }: Regist
             <span className="text-sm text-green-200">{success}</span>
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* 아이디 입력 */}
           <div>
@@ -693,7 +702,7 @@ function RegisterModal({ isOpen, onClose, serverUrl, onRegisterSuccess }: Regist
               />
             </div>
           </div>
-          
+
           <div className="flex justify-end space-x-3 pt-4">
             <button
               type="button"
@@ -705,10 +714,15 @@ function RegisterModal({ isOpen, onClose, serverUrl, onRegisterSuccess }: Regist
             </button>
             <button
               type="submit"
-              disabled={!username.trim() || !password.trim() || !confirmPassword.trim() || isRegistering}
+              disabled={
+                !username.trim() ||
+                !password.trim() ||
+                !confirmPassword.trim() ||
+                isRegistering
+              }
               className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors"
             >
-              {isRegistering ? '가입 중...' : '회원가입'}
+              {isRegistering ? "가입 중..." : "회원가입"}
             </button>
           </div>
         </form>

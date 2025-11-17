@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "appName": {
+      "type": "string",
+      "description": "Application name"
+    },
+    "port": {
+      "type": "number",
+      "description": "Server port"
+    }
+  },
+  "required": ["appName"]
+}

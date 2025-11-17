@@ -1,3 +1,5 @@
+import { T3Server } from "../ttapi";
+import { VoiceChannel } from "../types/serverDataTypes";
 
 export class T3VoiceChannelOp {
   m_server: T3Server;

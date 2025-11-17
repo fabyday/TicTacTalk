@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 
 export interface User {
   id: string;
@@ -17,7 +17,7 @@ export default function UserBar({
   user,
   onLogout,
 }: UserBarProps) {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   
   return (
     <div className="h-14 bg-gray-800 flex items-center justify-between px-4">

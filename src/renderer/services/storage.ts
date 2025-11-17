@@ -1,6 +1,6 @@
 import { Token } from "./types";
 
-interface T3AbstractStorage {
+export interface T3AbstractStorage {
   saveToken: () => Promise<void>;
   loadToken: () => Promise<Token>;
   saveConfig: () => Promise<void>;

@@ -2,6 +2,7 @@ import type { StorybookConfig } from "@storybook/react-webpack5";
 //https://storybook.js.org/addons/@storybook/addon-postcss
 
 const config: StorybookConfig = {
+  staticDirs : ["../images"],
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
     "@storybook/addon-webpack5-compiler-swc",

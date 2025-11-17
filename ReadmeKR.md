@@ -6,13 +6,13 @@
 </p>
 
 
-틱택톡은 사설 보이스톡 프로그램입니다. 보이스 서버와 클라이언트를 모두 포함하고 있습니다. 서버에 접속을 원하는 유저들을 서버의 주소를 통해 바로 대화에 참여할 수 있어요.
+틱택톡은 사설 보이스톡 프로그램입니다. 보이스 서버와 클라이언트를 모두 포함하고 있습니다. 서버에 접속을 원하는 유저들을 서버의 주소를 통해 바로 대화에 참여할 수 있어요. 
 
 
 ## Features
 - 아이디, 패스워드 불필요(설정시)
 - 적은 인원을 위한 작은 커뮤니티
-
+- 웹 브라우저에서 직접 접속 가능
 
 ## 기술 스택
 
@@ -39,13 +39,6 @@
 
 
 ## prerequirements
-python version : 3.10
-```
-pip install -r requirements.txt
-```
-depend On OPUS library
-
-download opus.dll in your environmentpath or its library
 
 
 <p align="center">

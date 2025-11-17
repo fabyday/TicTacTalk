@@ -12,8 +12,6 @@ export interface CreateVoiceChannelRequest {
 
 export type ChannelType = "text" | "voice";
 
-
-
 // 채널 생성 시 타입 선택
 export interface CreateChannelRequest {
   name: string;
@@ -32,4 +30,9 @@ export type ChannelErrorCode = "NotExisted" | "Invalid";
 export interface T3Error {
   msg: string;
   code: ChannelErrorCode | CommunityErrorCode;
+}
+
+export interface RequestNotify {
+  success: boolean;
+  message: string;
 }

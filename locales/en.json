@@ -1,0 +1,19 @@
+{
+  "renderer": {
+    "components": {
+      "chat": {
+        "MessageFeed": {
+          "NoMessages": "No Messages",
+          "NewMessage" : "New Message"
+        }
+      },
+      "ChatInput": {
+        "WriteMessage": "Write Message"
+      },
+      "ChatView": {
+
+
+      }
+    }
+  }
+}
