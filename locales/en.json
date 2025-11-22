@@ -4,15 +4,14 @@
       "chat": {
         "MessageFeed": {
           "NoMessages": "No Messages",
-          "NewMessage" : "New Message"
+          "NewMessage": "New Message"
+        },
+        "ChatInput": {
+          "WriteMessage": "Write Message"
+        },
+        "ChatView": {
+          "ChannelName": "Unknown Channel"
         }
-      },
-      "ChatInput": {
-        "WriteMessage": "Write Message"
-      },
-      "ChatView": {
-
-
       }
     }
   }

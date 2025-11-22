@@ -1,14 +1,68 @@
 {
+  "meta": {
+    "filename": "kr.json",
+    "type": "locales",
+    "name": "한국어"
+  },
   "renderer": {
     "components": {
+      "auth": {
+        "IdPlaceholder": "아이디",
+        "PasswordPlaceholder": "비밀번호",
+        "LoginButton": "로그인",
+        "RegisterButton": "회원가입",
+        "FindAccountButton": "아이디/비밀번호 찾기",
+        "AutoLoginButton": "자동 로그인",
+        "ShowPassword": "비밀번호 보기"
+      },
       "chat": {
         "MessageFeed": {
           "NoMessages": "아직 메세지가 없습니다",
           "NewMessage": "새로운 메시지"
+        },
+        "ChatInput": {
+          "WriteMessage": "메시지를 입력하세요"
+        },
+        "ChatView": {
+          "UnknownChannelName": "알수없는 채널"
         }
       },
-      "ChatInput": {
-        "WriteMessage": "메시지를 입력하세요"
+      "commons": {
+        "Shortcut": {
+          "DefaultValue": "기본값",
+          "EmptyDefaultValue": "기본값 없음",
+          "RegisterKey": "키 입력",
+          "CurrentValue": "현재값",
+          "Reset": "기본값 복원"
+        }
+      },
+      "settings": {
+        "GeneralSettings": {
+          "Title": "일반 설정",
+          "ThemeSetting": {
+            "Title": "테마"
+          },
+          "LanguageSetting": {
+            "Title": "언어"
+          },
+          "NotificationSetting": {
+            "Title": "알림",
+            "EnableDesktopAlarm": "데스크톱 알림 활성화"
+          },
+          "SystemSetting": {
+            "Title": "시스템",
+            "EnableAutoStart": "시스템 시작 시 자동 실행"
+          }
+        },
+        "ShortcutSettings": {
+          "Title": "단축키 설정"
+        },
+        "VoiceVideoSettings": {
+          "Title": "음성&비디오 설정"
+        },
+        "ServerListSettings": {
+          "Title": "서버 설정"
+        }
       }
     }
   }

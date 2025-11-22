@@ -4,7 +4,7 @@ import { MessageBlock } from "./MessageBlock";
 import { useTranslation } from "react-i18next";
 
 interface ChatViewProps {
-  messages: Message[];
+  messages?: Message[];
   lastMessageReadId?: number;
 }
 
@@ -34,7 +34,7 @@ export function MessageFeed({
         } as React.CSSProperties
       }
     >
-      {messages.length === 0 ? (
+      {typeof messages === "undefined" || messages.length === 0  ? (
         <div className="text-center text-gray-400 py-8">
           <div className="text-lg">{t("renderer.components.chat.MessageFeed.NoMessages")}</div>
         </div>
