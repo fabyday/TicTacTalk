@@ -1,6 +1,11 @@
 import { Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+export interface ChatInputProps{
+  
+}
+
+
 export function ChatInput() {
 
   const {t} = useTranslation()

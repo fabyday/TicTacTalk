@@ -6,6 +6,7 @@ import { MessageFeed } from "./MessageFeed";
 interface ChatViewProps {
   channelName?: string;
   messages?: Message[];
+  bgColor : string;
   onFocus?: () => void;
   onScroll?: () => void;
 }

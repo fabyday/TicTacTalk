@@ -104,7 +104,7 @@ export function ShortcutSettings() {
   };
 
   return (
-    <div className="max-w-4xl">
+    <div className="w-full">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">단축키 설정</h2>
         <button

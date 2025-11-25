@@ -5,6 +5,14 @@ interface Device {
   name: string;
 }
 
+export interface VoiceVideoSettings{
+
+
+  
+
+}
+
+
 export function VoiceVideoSettings() {
   const [audioInputs, setAudioInputs] = useState<Device[]>([]);
   const [audioOutputs, setAudioOutputs] = useState<Device[]>([]);
@@ -45,7 +53,7 @@ export function VoiceVideoSettings() {
   };
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full">
       <h2 className="text-2xl font-bold text-white mb-6">음성 & 비디오 설정</h2>
       
       <div className="space-y-6">

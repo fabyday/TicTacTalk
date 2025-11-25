@@ -18,6 +18,7 @@
     "test:server": "npx tsx --tsconfig tsconfig.json tests/run-test-server.ts",
     "test:server-only": "npx tsx --tsconfig tsconfig.json tests/voice-test-server.ts",
     "storybook": "storybook dev -p 6006",
+    "gen:component" : "plop component",
     "build-storybook": "storybook build"
   },
   "dependencies": {
@@ -63,6 +64,7 @@
     "html-webpack-plugin": "^5.6.3",
     "libopus.js": "^0.0.1",
     "node-opus": "^0.3.3",
+    "plop": "^4.0.4",
     "postcss": "^8.5.3",
     "postcss-loader": "^8.2.0",
     "storybook": "9.0.16",

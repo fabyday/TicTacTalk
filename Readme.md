@@ -39,13 +39,10 @@
 
 
 ## prerequirements
-python version : 3.10
-```
-pip install -r requirements.txt
-```
-depend On OPUS library
 
-download opus.dll in your environmentpath or its library
+```
+>>> yarn install
+```
 
 
 <p align="center">

@@ -39,25 +39,61 @@ export function LoginForm({ bgColor }: LoginForm) {
 
       {/* Register Button */}
       <div className="flex flex-col gap-1 items-center">
-        <button
-          className=" w-full
-                  text-black
-                  hover:text-white
-                  hover:bg-gradient-to-r from-transparent via-blue-700 to-transparent
-                  transition-all duration-400 ease-in-out"
-        >
-          {t("renderer.components.auth.RegisterButton")}
-        </button>
-        <button
-          className="    relative w-full
+        <div className="relative group w-full">
+          {/* Gradient Layer */}
+          <span
+            className="
+      absolute inset-0
+      bg-gradient-to-r from-transparent via-blue-700 to-transparent
+      opacity-0
+      group-hover:opacity-100
+      transition-opacity duration-300 ease-in-out
+      z-0
+      pointer-events-none
+    "
+          />
+          {/* Button Content */}
+          <button
+            className="
+                      relative z-10 
+                      w-full px-4 py-2
                       text-black
-                      hover:text-white
-                      hover:bg-gradient-to-r from-transparent via-blue-700 to-transparent
-                      transition-all duration-400 ease-in-out"
-        >
-          {t("renderer.components.auth.FindAccountButton")}
-        </button>
+                      transition-colors duration-300 ease-in-out
+                      group-hover:text-white
+                    "
+          >
+            {t("renderer.components.auth.RegisterButton")}
+          </button>
+        </div>
 
+        <div className="relative group w-full">
+          {/* Gradient Layer */}
+          <span
+            className="
+      absolute inset-0
+      bg-gradient-to-r from-transparent via-blue-700 to-transparent
+      opacity-0
+      group-hover:opacity-100
+      transition-opacity duration-300 ease-in-out
+      z-0
+      pointer-events-none
+    "
+          />
+          {/* Button Content */}
+          <button
+            className="
+                      relative z-10 
+                      w-full px-4 py-2
+                      text-black
+                      transition-colors duration-300 ease-in-out
+                      group-hover:text-white
+                    "
+          >
+            {t("renderer.components.auth.FindAccountButton")}
+          </button>
+        </div>
+        {/* 
+        
         {/* AutoLogin Btn */}
         <div className="w-full flex justify-between">
           <CheckBox

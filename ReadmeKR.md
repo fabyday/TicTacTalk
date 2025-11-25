@@ -46,6 +46,20 @@
 </p>
 
 
+## 렌더러 컴포넌트 파일 추가
+```
+yarn gen:component path/to/FileName
+```
+
+root를 src/renderer/component로 하는 명시된 파일이 story테스트 파일과 tsx파일이 추가된다.
+
+* 예시
+```
+yarn gen:component auth/LoginForm.tsx
+// src/renderer/component/auth/LoginForm.tsx 위치에 파일 생성
+// src/renderer/component/auth/LoginForm.stories.tsx 위치에 파일 생성
+```
+
 
 
 

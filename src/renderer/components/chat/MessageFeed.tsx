@@ -3,7 +3,7 @@ import { GuideLine } from "./GuideLine";
 import { MessageBlock } from "./MessageBlock";
 import { useTranslation } from "react-i18next";
 
-interface ChatViewProps {
+interface MessageFeedProps {
   messages?: Message[];
   lastMessageReadId?: number;
 }
@@ -11,7 +11,7 @@ interface ChatViewProps {
 export function MessageFeed({
   messages,
   lastMessageReadId: lastReadMessageId,
-}: ChatViewProps) {
+}: MessageFeedProps) {
   /**
    * TODO guideText
    */

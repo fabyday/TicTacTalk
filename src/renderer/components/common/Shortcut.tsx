@@ -48,7 +48,10 @@ export function Shortcut({
           {editingShortcut === id ? (
             <input
               type="text"
-              className="bg-gray-600 text-white border border-blue-500  rounded  font-mono text-center w-full"
+              className="bg-gray-600
+               text-white border border-blue-500  rounded  font-mono text-center w-full
+               caret-transparent
+               "
               placeholder="키 입력"
               onKeyDown={(e) => handleKeyPress(id, e)}
               onBlur={() => setEditingShortcut(null)}
