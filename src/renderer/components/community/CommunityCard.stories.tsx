@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { CommunityCard } from "./CommunityCard";
 
 const meta: Meta<typeof CommunityCard> = {
-  title: "Features/community/CommunityCard",
+  title: "Components/community/CommunityCard",
   component: CommunityCard,
   args: {
     name: "Coafe Dev Lounge",

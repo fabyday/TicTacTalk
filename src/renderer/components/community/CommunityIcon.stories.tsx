@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 
 const meta: Meta<typeof CommunityIcon> = {
-  title: "Components/CommunityIcon",
+  title: "Components/community/CommunityIcon",
   component: CommunityIcon,
   parameters: {
     layout: "centered",

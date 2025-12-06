@@ -50,6 +50,11 @@
 </p>
 
 
+## Add Renderer Compoent
+```
+yarn gen:component path/to/FileName
+
+```
 
 
 

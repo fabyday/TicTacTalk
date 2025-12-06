@@ -4,7 +4,7 @@ import ServerCardExpandable from "./CommunityCardExpandable";
 console.log("SCE typeof:", typeof ServerCardExpandable); // "function" 이 떠야 정상
 
 const meta = {
-  title: "Features/Server/ServerCardExpandable",
+  title: "Components/community/ServerCardExpandable",
   component: ServerCardExpandable,
   parameters: {
     layout: "centered",

@@ -88,7 +88,7 @@ function StatefulExplorer(
 }
 
 const meta: Meta<typeof CommunityExplorer> = {
-  title: "Community/CommunityExplorer",
+  title: "Components/community/CommunityExplorer",
   component: CommunityExplorer,
   tags: ["autodocs"],
   parameters: {

@@ -36,6 +36,12 @@
           "Reset": "기본값 복원"
         }
       },
+      "user": {
+        "TryConnect": "연결 시도 중",
+        "TryReConnect": "다시 연결 중",
+        "Disconnected" : "연결 끊김",
+        "VoiceConnected": "음성 연결됨"
+      },
       "settings": {
         "GeneralSettings": {
           "Title": "일반 설정",
@@ -54,6 +60,7 @@
             "EnableAutoStart": "시스템 시작 시 자동 실행"
           }
         },
+
         "ShortcutSettings": {
           "Title": "단축키 설정"
         },

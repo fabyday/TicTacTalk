@@ -34,8 +34,16 @@
 | DB   | [PostgreSQL](https://www.postgresql.org/)         | 오픈소스 관계형 데이터베이스 관리 시스템 |
 
 ### 지원 코덱
+* 오디오
 
-**오디오** : **Opus**
+| 이름                                  | 설명 |
+|--------------------------------------|------|
+| OPUS| 일반적인 보이스챗 프로그램들에서 사용하는 오디오 코덱|
+
+
+- 비디오 
+
+- - 아직 지원 안함
 
 
 ## prerequirements
@@ -50,17 +58,14 @@
 ```
 yarn gen:component path/to/FileName
 ```
-
 root를 src/renderer/component로 하는 명시된 파일이 story테스트 파일과 tsx파일이 추가된다.
 
 * 예시
-```
-yarn gen:component auth/LoginForm.tsx
+```bash
+>>> yarn gen:component auth/LoginForm.tsx
 // src/renderer/component/auth/LoginForm.tsx 위치에 파일 생성
 // src/renderer/component/auth/LoginForm.stories.tsx 위치에 파일 생성
 ```
-
-
 
 
 ## MIT 라이센스

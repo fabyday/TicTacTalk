@@ -18,11 +18,14 @@
     "test:server": "npx tsx --tsconfig tsconfig.json tests/run-test-server.ts",
     "test:server-only": "npx tsx --tsconfig tsconfig.json tests/voice-test-server.ts",
     "storybook": "storybook dev -p 6006",
-    "gen:component" : "plop component",
+    "gen:component": "plop component",
     "build-storybook": "storybook build"
   },
   "dependencies": {
     "@discordjs/opus": "^0.10.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@headlessui/react": "^2.2.1",
     "dgram": "^1.0.1",
     "electron-log": "^5.4.3",

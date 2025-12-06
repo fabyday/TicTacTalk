@@ -8,6 +8,7 @@ import React from "react";
  * - 크기별 위젯: widget prop에 ReactNode 또는 렌더 함수 제공 시 아이콘 옆에 표시
  */
 export type CommunityIconProps = {
+  id?: string;
   size?: "sm" | "md";
   /** 아이콘 이미지 경로 (있으면 사용, 없으면 이니셜 렌더) */
   iconSrc?: string;
@@ -30,6 +31,7 @@ export type CommunityIconProps = {
 };
 
 export function CommunityIcon({
+  id,
   size = "sm",
   iconSrc,
   initials,
@@ -46,16 +48,15 @@ export function CommunityIcon({
   const hasBadge = !!badgeText;
 
   const widgetNode =
-    typeof widget === "function"
-      ? (widget as (s: "sm" | "md") => React.ReactNode)(size)
-      : widget;
+    typeof widget === "function" ? (widget as (s: "sm" | "md") => React.ReactNode)(size) : widget;
 
   return (
-    <span className="relative inline-block w-10 h-10">
-      <button
-        className="
+    <div>
+      <span className="relative inline-block w-10 h-10">
+        <button
+          className="
         // transition duration-300 ease-in-out // for button ease out
-      relative w-full h-full
+      relative w-10 h-10
       rounded-[20%] border-0 p-0
       ring-3
       ring-gray-500
@@ -63,31 +64,27 @@ export function CommunityIcon({
       ring-offset-gray-200
       overflow-hidden bg-neutral-200
     "
-        aria-label="Community"
-      >
-        {iconSrc ? (
-          <img alt="" src={iconSrc} className="w-full h-full object-cover" />
-        ) : (
-          initials
-        )}
-      </button>
-      {badgeText ? (
-        <span className="absolute -right-1.5 -bottom-1.5 pointer-events-none">
-          {/* 배지 크기 기준 컨테이너 */}
-          {/* <span className="relative inline-flex items-center justify-center min-w-4 h-4 px-1"> */}
-          <span className="relative inline-flex items-center justify-center min-w-4 h-4 px-1">
-            {/* 1) 항상 은은한 발광(블러) */}
-            {/* <span className="absolute inset-0 rounded-full bg-red-600 opacity-50 blur-[4px]" /> */}
-            <span className="absolute -inset-0.5 rounded-full bg-red-600 opacity-35 blur-[6px]" />
-            {/* 2) 살짝 퍼지는 핑 효과(기본 Tailwind 애니메이션) */}
+          aria-label="Community"
+        >
+          {iconSrc ? <img alt="" src={iconSrc} className="w-full h-full object-cover" /> : initials}
+        </button>
+        {badgeText ? (
+          <span className="absolute -right-1.5 -bottom-1.5 pointer-events-none">
+            {/* 배지 크기 기준 컨테이너 */}
+            {/* <span className="relative inline-flex items-center justify-center min-w-4 h-4 px-1"> */}
+            <span className="relative inline-flex items-center justify-center min-w-4 h-4 px-1">
+              {/* 1) 항상 은은한 발광(블러) */}
+              {/* <span className="absolute inset-0 rounded-full bg-red-600 opacity-50 blur-[4px]" /> */}
+              <span className="absolute -inset-0.5 rounded-full bg-red-600 opacity-35 blur-[6px]" />
+              {/* 2) 살짝 퍼지는 핑 효과(기본 Tailwind 애니메이션) */}
 
-            <span className="absolute inset-0 rounded-full bg-red-600 opacity-30 animate-ping" />
+              <span className="absolute inset-0 rounded-full bg-red-600 opacity-30 animate-ping" />
 
-            {/* 실제 숫자 배지 */}
-            {/* 버튼 밖으로 살짝 겹치는 배지 */}
+              {/* 실제 숫자 배지 */}
+              {/* 버튼 밖으로 살짝 겹치는 배지 */}
 
-            <span
-              className="
+              <span
+                className="
       absolute -right-1.5 -bottom-1.5
       min-w-4 h-4 px-1 py-0
       rounded-full bg-red-600 text-white text-[10px]
@@ -96,37 +93,18 @@ export function CommunityIcon({
       pointer-events-none
        overflow-hidden
     "
-            >
-              {badgeText}
-              <span
-                className="pointer-events-none absolute inset-0 rounded-full
+              >
+                {badgeText}
+                <span
+                  className="pointer-events-none absolute inset-0 rounded-full
     bg-[radial-gradient(55%_45%_at_72%_10%,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.35)_40%,transparent_60%)]
     mix-blend-screen"
-              />
+                />
+              </span>
             </span>
           </span>
-        </span>
-      ) : undefined}
-    </span>
-  );
-  return (
-    <div className="static">
-      <button
-        type="button"
-        className=" bg-gray-400"
-        aria-label={ariaLabel}
-        onClick={onClick}
-        draggable={false}
-      >
-        <img
-          src="./main.jpg"
-          alt=""
-          className="pointer-events-none object-cover w-32 h-32 rounded-4xl"
-        ></img>
-        <div className="pointer-events-none object-cover w-4 h-4 absolute bottom-1 right-1 items-center inline-flex">
-          <span>10</span>
-        </div>
-      </button>
+        ) : undefined}
+      </span>
     </div>
   );
 }
